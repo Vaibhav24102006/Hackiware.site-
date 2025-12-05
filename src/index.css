@@ -1,0 +1,79 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@400;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #0a0a0f;
+  color: #ffffff;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+::selection {
+  background: #00e0ff;
+  color: #0a0a0f;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #00e0ff, #00ff85);
+  border-radius: 999px;
+}
+
+.typewriter::after {
+  content: "|";
+  margin-left: 2px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Premium Header Styles */
+.nav-link {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-underline {
+  border-radius: 1px;
+  box-shadow: 0 0 8px rgba(0, 224, 255, 0.6), 0 0 12px rgba(0, 255, 133, 0.4);
+}
+
+/* Logo Shell with Trim */
+.logo-shell {
+  box-shadow: 0 6px 30px rgba(0, 224, 255, 0.06),
+              inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.logo-mask {
+  mask-image: radial-gradient(circle at 50% 50%, #000 72%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 72%, transparent 100%);
+}
