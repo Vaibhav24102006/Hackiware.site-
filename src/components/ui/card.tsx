@@ -21,3 +21,4 @@ const Card = ({ children, className = "", glow = "rgba(0,224,255,0.25)" }) => {
 
 export default Card;
 
+

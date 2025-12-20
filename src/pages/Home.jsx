@@ -1,27 +1,21 @@
-import ScrollExpandHero from "../components/blocks/ScrollExpandHero";
-import Hero from "../components/sections/Hero.jsx";
-import WhatIs from "../components/sections/WhatIs";
-import Services from "../components/sections/Services.jsx";
-import KavachSurakshaSection from "../components/sections/events/KavachSurakshaSection";
-import TeamScroller from "../components/sections/TeamScroller";
+import Hero from "../components/sections/Hero";
+import QuoteSection from "../components/sections/QuoteSection";
+import SplineSection from "../components/sections/SplineSection";
+import CountUpMetrics from "../components/ui/CountUp";
 
 const Home = () => (
   <>
-    <ScrollExpandHero 
-      mediaType="video"
-      mediaSrc="https://me7aitdbxq.ufs.sh/f/2wsMIGDMQRdYuZ5R8ahEEZ4aQK56LizRdfBSqeDMsmUIrJN1"
-      posterSrc="https://images.pexels.com/videos/5752729/space-earth-universe-cosmos-5752729.jpeg"
-      bgImageSrc="https://me7aitdbxq.ufs.sh/f/2wsMIGDMQRdYMNjMlBUYHaeYpxduXPVNwf8mnFA61L7rkcoS"
-      title="Cyberpunk Digital Experiences"
-      date="Hackiware Research Division"
-      scrollToExpand="Scroll to Reveal – Dive Into The Experience"
-      textBlend={true}
-    />
+    {/* 1. Hero Section with Video Background */}
     <Hero />
-    <WhatIs />
-    <Services />
-    <KavachSurakshaSection />
-    <TeamScroller />
+    
+    {/* 2. Quote Section - Anant Vega Style */}
+    <QuoteSection />
+    
+    {/* 3. Interactive 3D Systems Section */}
+    <SplineSection />
+    
+    {/* 4. Count-Up Metrics */}
+    <CountUpMetrics />
   </>
 );
 

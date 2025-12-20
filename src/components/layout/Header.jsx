@@ -8,6 +8,7 @@ const navLinks = [
     { label: 'HOME', path: '/' },
     { label: 'ABOUT', path: '/about' },
     { label: 'ACHIEVEMENTS', path: '/achievements' },
+    { label: 'EVENTS', path: '/events' },
     { label: 'CONTACT', path: '/contact' },
 ];
 
@@ -28,9 +29,6 @@ const Header = () => {
     return (
         <>
             <motion.header
-                initial={{ y: -80, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5, ease: 'easeOut' }}
                 className={cn(
                     'fixed inset-x-0 top-0 z-50 flex justify-center pt-4 pb-4 transition-all duration-300',
                     isScrolled ? 'bg-gradient-to-b from-black/70 via-black/40 to-transparent' : 'bg-transparent'
@@ -38,7 +36,7 @@ const Header = () => {
             >
                 <div
                     className={cn(
-                        'mx-auto flex w-full max-w-6xl items-center justify-between rounded-full border px-4 md:px-8 h-20 md:h-24 backdrop-blur-xl bg-black/30 shadow-[0_0_40px_rgba(34,211,238,0.35)] transition-all duration-300 pointer-events-auto',
+                        'mx-auto flex w-full max-w-6xl items-center justify-between rounded-full border px-4 md:px-8 h-24 md:h-28 backdrop-blur-xl bg-black/30 shadow-[0_0_40px_rgba(34,211,238,0.35)] transition-all duration-300 pointer-events-auto',
                         'border-cyan-400/30',
                         isScrolled ? 'scale-100 opacity-100' : 'scale-[0.98] opacity-95'
                     )}
