@@ -1,5 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useInView, useMotionValue, useSpring } from 'framer-motion';
+import {
+  containerVariants,
+  cardVariants,
+  reducedMotionContainerVariants,
+  reducedMotionVariants,
+} from '../../lib/routeAnimations';
+
+const prefersReducedMotion = () => {
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+};
 
 const CountUp = ({ end, prefix = '', suffix = '' }) => {
   const ref = useRef(null);
@@ -40,21 +51,38 @@ const CountUpMetrics = () => {
     { value: 15, suffix: '+', label: 'Industrial Partners' },
   ];
 
+  const shouldReduceMotion = useRef(prefersReducedMotion());
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const handleChange = () => {
+      shouldReduceMotion.current = mediaQuery.matches;
+    };
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
+  const container = shouldReduceMotion.current
+    ? reducedMotionContainerVariants
+    : containerVariants;
+  const card = shouldReduceMotion.current ? reducedMotionVariants : cardVariants;
+
   return (
     <section className="relative bg-[#050505] py-24">
-      {/* Soft gradient fade divider */}
       <div className="pointer-events-none absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent via-black/20 to-transparent" />
       
       <div className="container relative z-10 mx-auto px-6">
-        <div className="mx-auto max-w-6xl">
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="visible"
+          className="mx-auto max-w-6xl"
+        >
           <div className="grid gap-12 md:grid-cols-3">
-            {metrics.map((metric, index) => (
+            {metrics.map((metric) => (
               <motion.div
                 key={metric.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                variants={card}
                 className="text-center"
               >
                 <div className="mb-4 text-5xl font-light text-white md:text-6xl lg:text-7xl">
@@ -66,7 +94,7 @@ const CountUpMetrics = () => {
               </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

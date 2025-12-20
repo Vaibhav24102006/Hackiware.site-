@@ -1,5 +1,16 @@
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { ContainerScroll } from "../components/ui/container-scroll-animation";
+import {
+  leftSectionVariants,
+  rightSectionVariants,
+  reducedMotionSectionVariants,
+} from "../lib/routeAnimations";
+
+const prefersReducedMotion = () => {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+};
 
 const eventSections = [
   {
@@ -23,36 +34,54 @@ const eventSections = [
 ];
 
 const Events = () => {
+  const shouldReduceMotion = useRef(prefersReducedMotion());
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const handleChange = () => {
+      shouldReduceMotion.current = mediaQuery.matches;
+    };
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  const leftVariant = shouldReduceMotion.current
+    ? reducedMotionSectionVariants
+    : leftSectionVariants;
+  const rightVariant = shouldReduceMotion.current
+    ? reducedMotionSectionVariants
+    : rightSectionVariants;
+
   return (
     <section className="relative min-h-screen bg-[#050505] pt-32 pb-24">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="mx-auto max-w-5xl text-center">
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="font-orbitron text-xs uppercase tracking-[0.4em] text-cyan-400"
-          >
-            Events
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.05 }}
-            className="mt-3 text-4xl font-light text-white sm:text-5xl"
-          >
-            Precision-led cybersecurity experiences
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="mt-4 text-white/70"
-          >
-            Three signature programs showcasing Hackiware’s research, defense drills, and
-            real-time response readiness.
-          </motion.p>
-        </div>
+        <div className="mx-auto max-w-5xl">
+          <div className="grid gap-8 md:grid-cols-2 md:gap-12 mb-16">
+            <motion.div
+              variants={leftVariant}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+            >
+              <p className="font-orbitron text-xs uppercase tracking-[0.4em] text-cyan-400">
+                Events
+              </p>
+              <h1 className="mt-3 text-4xl font-light text-white sm:text-5xl">
+                Precision-led cybersecurity experiences
+              </h1>
+            </motion.div>
+            <motion.div
+              variants={rightVariant}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+            >
+              <p className="mt-4 text-white/70 md:mt-12">
+                Three signature programs showcasing Hackiware's research, defense drills, and
+                real-time response readiness.
+              </p>
+            </motion.div>
+          </div>
 
         <div className="mt-16 space-y-10">
           {eventSections.map((section, idx) => (
@@ -80,6 +109,7 @@ const Events = () => {
             </ContainerScroll>
           ))}
         </div>
+      </div>
       </div>
     </section>
   );

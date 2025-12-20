@@ -1,5 +1,23 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import {
+  containerVariants,
+  headingVariants,
+  paragraphVariants,
+  cardVariants,
+  buttonVariants,
+  leftSectionVariants,
+  rightSectionVariants,
+  reducedMotionContainerVariants,
+  reducedMotionVariants,
+  reducedMotionSectionVariants,
+} from '../lib/routeAnimations';
+
+const prefersReducedMotion = () => {
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+};
 
 const achievements = [
   {
@@ -23,45 +41,74 @@ const achievements = [
 ];
 
 const Achievements = () => {
+  const shouldReduceMotion = useRef(prefersReducedMotion());
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const handleChange = () => {
+      shouldReduceMotion.current = mediaQuery.matches;
+    };
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
+  const container = shouldReduceMotion.current
+    ? reducedMotionContainerVariants
+    : containerVariants;
+  const heading = shouldReduceMotion.current ? reducedMotionVariants : headingVariants;
+  const paragraph = shouldReduceMotion.current ? reducedMotionVariants : paragraphVariants;
+  const card = shouldReduceMotion.current ? reducedMotionVariants : cardVariants;
+  const button = shouldReduceMotion.current ? reducedMotionVariants : buttonVariants;
+
+  const leftVariant = shouldReduceMotion.current
+    ? reducedMotionSectionVariants
+    : leftSectionVariants;
+  const rightVariant = shouldReduceMotion.current
+    ? reducedMotionSectionVariants
+    : rightSectionVariants;
+
   return (
     <section className="relative min-h-screen bg-[#050505] pt-32 pb-24">
       <div className="container mx-auto px-6">
         <div className="mx-auto max-w-4xl">
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-16 text-center"
-          >
-            <p className="mb-4 font-orbitron text-xs uppercase tracking-[0.4em] text-cyan-400">
-              Our Milestones
-            </p>
-            <h1 className="text-4xl font-light text-white sm:text-5xl md:text-6xl">
-              Achievements &{' '}
-              <span className="bg-gradient-to-r from-cyan-400 to-fuchsia-500 bg-clip-text text-transparent">
-                Recognitions
-              </span>
-            </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-base text-white/70 md:text-lg">
-              Building a legacy of excellence in cybersecurity research and execution.
-            </p>
-          </motion.div>
+          <div className="grid gap-8 md:grid-cols-2 md:gap-12 mb-16">
+            <motion.div
+              variants={leftVariant}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+            >
+              <p className="mb-4 font-orbitron text-xs uppercase tracking-[0.4em] text-cyan-400">
+                Our Milestones
+              </p>
+              <h1 className="text-4xl font-light text-white sm:text-5xl md:text-6xl">
+                Achievements &{' '}
+                <span className="bg-gradient-to-r from-cyan-400 to-fuchsia-500 bg-clip-text text-transparent">
+                  Recognitions
+                </span>
+              </h1>
+            </motion.div>
+            <motion.div
+              variants={rightVariant}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+            >
+              <p className="mx-auto mt-6 max-w-2xl text-base text-white/70 md:text-lg md:mt-0">
+                Building a legacy of excellence in cybersecurity research and execution.
+              </p>
+            </motion.div>
+          </div>
 
-          {/* Timeline */}
-          <div className="space-y-8">
-            {achievements.map((achievement, index) => (
+          <motion.div variants={container} initial="hidden" animate="visible" className="space-y-8">
+            {achievements.map((achievement) => (
               <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                key={achievement.title}
+                variants={card}
                 className="relative pl-8 border-l border-white/10"
               >
-                {/* Timeline dot */}
                 <div className="absolute -left-2 top-0 h-4 w-4 rounded-full border-2 border-cyan-400 bg-[#050505]" />
                 
-                {/* Content */}
                 <div className="pb-8">
                   <div className="mb-2 flex items-center gap-3">
                     <span className="rounded-full bg-cyan-400/20 px-3 py-1 text-xs font-medium uppercase tracking-wider text-cyan-300">
@@ -78,18 +125,12 @@ const Achievements = () => {
                 </div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
 
-          {/* CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-16 text-center"
-          >
-            <p className="mb-6 text-white/70">
+          <motion.div variants={button} initial="hidden" animate="visible" className="mt-16 text-center">
+            <motion.p variants={paragraph} className="mb-6 text-white/70">
               Learn more about our research and initiatives
-            </p>
+            </motion.p>
             <Link
               to="/about"
               className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-6 py-3 text-sm font-medium uppercase tracking-wider text-cyan-300 transition-all duration-300 hover:border-cyan-400/50 hover:bg-cyan-400/20"

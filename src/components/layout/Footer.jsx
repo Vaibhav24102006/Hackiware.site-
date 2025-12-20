@@ -1,5 +1,15 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import {
+  footerVariants,
+  reducedMotionFooterVariants,
+} from "../../lib/routeAnimations";
+
+const prefersReducedMotion = () => {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+};
 
 const socialLinks = [
   {
@@ -60,8 +70,31 @@ const footerLinks = [
   { label: "Login", href: "/login" },
 ];
 
-const Footer = () => (
-  <footer className="border-t border-white/10 bg-[#050506] py-12 text-white">
+const Footer = () => {
+  const location = useLocation();
+  const shouldReduceMotion = useRef(prefersReducedMotion());
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const handleChange = () => {
+      shouldReduceMotion.current = mediaQuery.matches;
+    };
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  const footerVariant = shouldReduceMotion.current
+    ? reducedMotionFooterVariants
+    : footerVariants;
+
+  return (
+    <motion.footer
+      key={location.pathname}
+      variants={footerVariant}
+      initial="hidden"
+      animate="visible"
+      className="border-t border-white/10 bg-[#050506] py-12 text-white"
+    >
     <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 md:flex-row md:items-start md:justify-between">
       <div>
         <p className="font-orbitron text-sm uppercase tracking-[0.3em] text-hacki-cyan">
@@ -117,10 +150,11 @@ const Footer = () => (
         </div>
       </div>
     </div>
-    <p className="mt-10 text-center text-xs text-white/40">
-      © {new Date().getFullYear()} Hackiware. All rights reserved.
-    </p>
-  </footer>
-);
+      <p className="mt-10 text-center text-xs text-white/40">
+        © {new Date().getFullYear()} Hackiware. All rights reserved.
+      </p>
+    </motion.footer>
+  );
+};
 
 export default Footer;

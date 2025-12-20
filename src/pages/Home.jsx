@@ -1,22 +1,47 @@
+import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import Hero from "../components/sections/Hero";
 import QuoteSection from "../components/sections/QuoteSection";
 import SplineSection from "../components/sections/SplineSection";
 import CountUpMetrics from "../components/ui/CountUp";
+import {
+  containerVariants,
+  reducedMotionContainerVariants,
+} from "../lib/routeAnimations";
 
-const Home = () => (
-  <>
-    {/* 1. Hero Section with Video Background */}
-    <Hero />
-    
-    {/* 2. Quote Section - Anant Vega Style */}
-    <QuoteSection />
-    
-    {/* 3. Interactive 3D Systems Section */}
-    <SplineSection />
-    
-    {/* 4. Count-Up Metrics */}
-    <CountUpMetrics />
-  </>
-);
+const prefersReducedMotion = () => {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+};
+
+const Home = () => {
+  const shouldReduceMotion = useRef(prefersReducedMotion());
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const handleChange = () => {
+      shouldReduceMotion.current = mediaQuery.matches;
+    };
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  const container = shouldReduceMotion.current
+    ? reducedMotionContainerVariants
+    : containerVariants;
+
+  return (
+    <motion.div
+      variants={container}
+      initial="hidden"
+      animate="visible"
+    >
+      <Hero />
+      <QuoteSection />
+      <SplineSection />
+      <CountUpMetrics />
+    </motion.div>
+  );
+};
 
 export default Home;

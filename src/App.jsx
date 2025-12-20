@@ -1,4 +1,6 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
+import { useRef, useEffect } from "react";
 import Header from "./components/layout/Header.jsx";
 import Footer from "./components/layout/Footer";
 import Home from "./pages/Home";
@@ -7,6 +9,84 @@ import Achievements from "./pages/Achievements";
 import Events from "./pages/Events";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
+import PageWrapper from "./components/shared/PageWrapper";
+
+const routeOrder = {
+  "/": 0,
+  "/about": 1,
+  "/achievements": 2,
+  "/events": 3,
+  "/contact": 4,
+  "/login": 5,
+};
+
+const AnimatedRoutes = () => {
+  const location = useLocation();
+  const prevPathname = useRef(location.pathname);
+
+  const currentIndex = routeOrder[location.pathname] ?? 0;
+  const prevIndex = routeOrder[prevPathname.current] ?? 0;
+  const direction = currentIndex >= prevIndex ? 1 : -1;
+
+  useEffect(() => {
+    prevPathname.current = location.pathname;
+  }, [location.pathname]);
+
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      <Routes location={location} key={location.pathname}>
+        <Route
+          path="/"
+          element={
+            <PageWrapper direction={direction}>
+              <Home />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            <PageWrapper direction={direction}>
+              <About />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/achievements"
+          element={
+            <PageWrapper direction={direction}>
+              <Achievements />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/events"
+          element={
+            <PageWrapper direction={direction}>
+              <Events />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/contact"
+          element={
+            <PageWrapper direction={direction}>
+              <Contact />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <PageWrapper direction={direction}>
+              <Login />
+            </PageWrapper>
+          }
+        />
+      </Routes>
+    </AnimatePresence>
+  );
+};
 
 const App = () => (
   <div className="min-h-screen bg-[#050505] font-inter text-white">
@@ -14,14 +94,7 @@ const App = () => (
       <div className="flex min-h-screen flex-col">
         <Header />
         <main className="flex-1 pt-24 md:pt-28">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/achievements" element={<Achievements />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
+          <AnimatedRoutes />
         </main>
         <Footer />
       </div>
