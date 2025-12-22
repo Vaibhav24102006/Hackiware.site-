@@ -2,6 +2,8 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import AchievementsGrid from "../components/sections/AchievementsGrid";
+import SpatialProductShowcase from "../components/ui/spatial-product-showcase";
+import CommandCenter from "../components/sections/CommandCenter";
 import {
   containerVariants,
   headingVariants,
@@ -72,6 +74,7 @@ const Achievements = () => {
     <section className="relative min-h-screen bg-[#050505] pt-32 pb-24">
       <div className="container mx-auto px-6">
         <div className="mx-auto max-w-4xl">
+          {/* Existing Achievements Hero - UNCHANGED */}
           <div className="grid gap-8 md:grid-cols-2 md:gap-12 mb-16">
             <motion.div
               variants={leftVariant}
@@ -101,9 +104,17 @@ const Achievements = () => {
             </motion.div>
           </div>
 
+          {/* Spatial Intelligence Showcase - CENTERPIECE */}
+          <SpatialProductShowcase />
+
+          {/* Glowing Achievements Grid */}
           <AchievementsGrid />
 
-          <motion.div variants={container} initial="hidden" animate="visible" className="space-y-8">
+          {/* Command Center Section */}
+          <CommandCenter />
+
+          {/* Existing Timeline - UNCHANGED */}
+          <motion.div variants={container} initial="hidden" animate="visible" className="space-y-8 mt-16">
             {achievements.map((achievement) => (
               <motion.div
                 key={achievement.title}
@@ -130,6 +141,7 @@ const Achievements = () => {
             ))}
           </motion.div>
 
+          {/* Existing CTA - UNCHANGED */}
           <motion.div variants={button} initial="hidden" animate="visible" className="mt-16 text-center">
             <motion.p variants={paragraph} className="mb-6 text-white/70">
               Learn more about our research and initiatives

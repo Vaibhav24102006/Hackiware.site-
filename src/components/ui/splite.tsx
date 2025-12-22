@@ -20,3 +20,4 @@ const SplineScene = ({ scene, className = "" }) => {
 export default SplineScene;
 
 
+

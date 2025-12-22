@@ -4,18 +4,36 @@ const EventsScrollSections = () => {
   const events = [
     {
       title: 'Source Code Seminar',
-      description: 'Deep dives into secure coding, reverse engineering, and adversarial simulations led by Hackiware researchers.',
+      narrative: 'Foundational education in secure coding practices, reverse engineering techniques, and adversarial simulation frameworks. Designed for students and practitioners seeking hands-on exposure to real-world security challenges.',
+      metadata: {
+        audience: 'Students & Practitioners',
+        type: 'Educational Workshop',
+        scale: 'Regional',
+      },
       mediaClass: 'bg-gradient-to-br from-cyan-500/30 via-blue-500/10 to-black',
+      tone: 'academic',
     },
     {
       title: 'Kavach Suraksha',
-      description: 'Collaborative defense exercises focused on high-stakes, real-world threat scenarios with multi-team participation.',
+      narrative: 'Collaborative defense exercises focused on high-stakes, real-world threat scenarios with multi-team participation. Tactical training environments that simulate enterprise-level security operations and incident response.',
+      metadata: {
+        audience: 'Security Teams',
+        type: 'Defense Exercise',
+        scale: 'National',
+      },
       mediaClass: 'bg-gradient-to-br from-emerald-500/25 via-cyan-500/10 to-black',
+      tone: 'tactical',
     },
     {
       title: 'Kavach Suraksha 2.0',
-      description: 'Scaling national-level cyber defense challenges with advanced telemetry, rapid response drills, and live simulations.',
+      narrative: 'Scaling national-level cyber defense challenges with advanced telemetry, rapid response drills, and live simulations. Command-center authority meets cutting-edge threat intelligence in Hackiware\'s flagship program.',
+      metadata: {
+        audience: 'National Security Community',
+        type: 'Flagship Program',
+        scale: 'National',
+      },
       mediaClass: 'bg-gradient-to-br from-fuchsia-500/25 via-cyan-500/10 to-black',
+      tone: 'flagship',
     },
   ];
 
@@ -27,13 +45,29 @@ const EventsScrollSections = () => {
             <ContainerScroll
               key={event.title}
               titleComponent={
-                <div className="space-y-3">
-                  <h2 className="text-2xl font-semibold text-white sm:text-3xl md:text-4xl">
+                <div className="space-y-4 max-w-4xl mx-auto">
+                  <h2 className="text-3xl font-semibold text-white sm:text-4xl md:text-5xl">
                     {event.title}
                   </h2>
-                  <p className="text-white/70 text-sm md:text-base max-w-2xl mx-auto">
-                    {event.description}
+                  <p className="text-white/80 text-base md:text-lg leading-relaxed max-w-3xl mx-auto">
+                    {event.narrative}
                   </p>
+                  <div className="flex flex-wrap items-center justify-center gap-6 pt-2 text-xs uppercase tracking-[0.2em] text-white/60">
+                    <div className="flex items-center gap-2">
+                      <span className="text-white/40">Audience</span>
+                      <span className="text-white/80">{event.metadata.audience}</span>
+                    </div>
+                    <div className="h-4 w-px bg-white/20" />
+                    <div className="flex items-center gap-2">
+                      <span className="text-white/40">Type</span>
+                      <span className="text-white/80">{event.metadata.type}</span>
+                    </div>
+                    <div className="h-4 w-px bg-white/20" />
+                    <div className="flex items-center gap-2">
+                      <span className="text-white/40">Scale</span>
+                      <span className="text-white/80">{event.metadata.scale}</span>
+                    </div>
+                  </div>
                 </div>
               }
             >
@@ -54,4 +88,3 @@ const EventsScrollSections = () => {
 };
 
 export default EventsScrollSections;
-
