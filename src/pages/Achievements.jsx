@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
+import AchievementsGrid from "../components/sections/AchievementsGrid";
 import {
   containerVariants,
   headingVariants,
@@ -99,6 +100,8 @@ const Achievements = () => {
               </p>
             </motion.div>
           </div>
+
+          <AchievementsGrid />
 
           <motion.div variants={container} initial="hidden" animate="visible" className="space-y-8">
             {achievements.map((achievement) => (

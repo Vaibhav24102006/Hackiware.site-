@@ -10,6 +10,8 @@
     "@testing-library/user-event": "^13.5.0",
     "clsx": "^2.1.1",
     "framer-motion": "^10.18.0",
+    "lucide-react": "^0.562.0",
+    "motion": "^12.23.26",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.5.0",
