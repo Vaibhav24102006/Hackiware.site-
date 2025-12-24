@@ -8,14 +8,24 @@ import {
 } from "framer-motion";
 import { Link } from "react-router-dom";
 
+/**
+ * @param {{
+ *  children: import("react").ReactNode,
+ *  onClick?: import("react").MouseEventHandler<HTMLButtonElement>,
+ *  href?: string,
+ *  className?: string,
+ *  glowColor?: string
+ * }} props
+ */
 const GlassyButton = ({
   children,
-  onClick,
-  href,
+  onClick = undefined,
+  href = undefined,
   className = "",
   glowColor = "#00E0FF",
   ...rest
 }) => {
+
   const Component = href ? Link : "button";
   const prefersReducedMotion = useReducedMotion();
   const [isMobile, setIsMobile] = useState(false);

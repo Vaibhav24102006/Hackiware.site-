@@ -21,10 +21,14 @@ const Login = () => (
           placeholder="Password"
           className="rounded-full border border-white/10 bg-black/40 px-4 py-3 text-sm text-white focus:border-hacki-cyan focus:outline-none"
         />
-        <GlassyButton>Enter Vault</GlassyButton>
+        <GlassyButton onClick={() => {}} href="/">
+          Login
+        </GlassyButton>
+
       </div>
     </div>
   </section>
 );
 
 export default Login;
+

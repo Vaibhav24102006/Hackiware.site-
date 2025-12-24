@@ -6,9 +6,18 @@ import {
   FlaskConical,
   Handshake,
   Award,
+  LucideIcon,
 } from "lucide-react";
 
-const cards = [
+interface Card {
+  category: string;
+  title: string;
+  description: string;
+  icon: LucideIcon;
+  colSpan: string;
+}
+
+const cards: Card[] = [
   {
     category: "National Cybersecurity Events",
     title: "Kavach Suraksha",
@@ -107,3 +116,4 @@ const AchievementsGrid = () => {
 };
 
 export default AchievementsGrid;
+

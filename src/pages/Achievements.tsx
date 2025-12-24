@@ -17,12 +17,19 @@ import {
   reducedMotionSectionVariants,
 } from '../lib/routeAnimations';
 
-const prefersReducedMotion = () => {
+const prefersReducedMotion = (): boolean => {
   if (typeof window === 'undefined') return false;
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 };
 
-const achievements = [
+interface Achievement {
+  category: string;
+  title: string;
+  description: string;
+  year: string;
+}
+
+const achievements: Achievement[] = [
   {
     category: 'Recognition',
     title: 'Kavach Suraksha 2.0',
@@ -160,3 +167,4 @@ const Achievements = () => {
 };
 
 export default Achievements;
+

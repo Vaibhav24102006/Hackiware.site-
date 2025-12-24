@@ -10,13 +10,13 @@ import {
 } from '../../lib/routeAnimations';
 import { useEffect, useRef } from 'react';
 
-const prefersReducedMotion = () => {
+const prefersReducedMotion = (): boolean => {
   if (typeof window === 'undefined') return false;
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 };
 
 const SplineSection = () => {
-  const bulletPoints = [
+  const bulletPoints: string[] = [
     "Cyber defense prototypes tested with real-world threat models",
     "Human-centered control surfaces for rapid incident response",
     "Research-driven motion and 3D that stays performant",

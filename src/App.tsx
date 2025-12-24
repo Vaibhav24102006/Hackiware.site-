@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { useRef, useEffect } from "react";
-import Header from "./components/layout/Header.jsx";
+import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -11,7 +11,7 @@ import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import PageWrapper from "./components/shared/PageWrapper";
 
-const routeOrder = {
+const routeOrder: Record<string, number> = {
   "/": 0,
   "/about": 1,
   "/achievements": 2,

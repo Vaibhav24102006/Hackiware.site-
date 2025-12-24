@@ -112,3 +112,4 @@ const EventTemplate = () => {
 };
 
 export default EventTemplate;
+

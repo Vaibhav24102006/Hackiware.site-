@@ -9,7 +9,7 @@ import {
   reducedMotionContainerVariants,
 } from "../lib/routeAnimations";
 
-const prefersReducedMotion = () => {
+const prefersReducedMotion = (): boolean => {
   if (typeof window === "undefined") return false;
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 };
@@ -45,3 +45,4 @@ const Home = () => {
 };
 
 export default Home;
+

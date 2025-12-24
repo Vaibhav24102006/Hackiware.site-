@@ -1,179 +1,312 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { ShieldCheck, Radar, LineChart } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ShieldCheck,
+  Radar,
+  Activity,
+  Lock,
+  Network,
+  AlertTriangle,
+  TrendingUp,
+  Zap,
+  Eye,
+  Layers,
+} from "lucide-react";
 
-const metricVariants = {
-  initial: { opacity: 0, y: 8 },
-  animate: { opacity: 1, y: 0 },
+type ProductId = "left" | "right";
+
+interface FeatureMetric {
+  label: string;
+  value: string;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+}
+
+interface ProductData {
+  id: ProductId;
+  title: string;
+  description: string;
+  features: FeatureMetric[];
+  gradient: string;
+  ringColor: string;
+  glowColor: string;
+  imageUrl: string;
+}
+
+const PRODUCT_DATA: Record<ProductId, ProductData> = {
+  left: {
+    id: "left",
+    title: "Defense Systems",
+    description: "Hardened perimeter, identity, and internal security controls with real-time threat response.",
+    features: [
+      { label: "MTTR", value: "22 min", icon: Zap },
+      { label: "Coverage %", value: "96%", icon: ShieldCheck },
+      { label: "Response Rate", value: "99.2%", icon: Activity },
+      { label: "Perimeter Controls", value: "Active", icon: Lock },
+      { label: "Identity Controls", value: "Active", icon: Network },
+      { label: "Internal Controls", value: "Active", icon: Layers },
+    ],
+    gradient: "from-cyan-500/20 via-blue-500/10 to-cyan-900/20",
+    ringColor: "rgba(34, 211, 238, 0.3)",
+    glowColor: "rgba(34, 211, 238, 0.4)",
+    imageUrl: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80",
+  },
+  right: {
+    id: "right",
+    title: "Threat Intelligence",
+    description: "Correlated signals, anomaly detection, and hunting-ready insights from global threat feeds.",
+    features: [
+      { label: "Signals Correlated", value: "1.2M+", icon: Radar },
+      { label: "Threat Feeds", value: "48", icon: Network },
+      { label: "Readiness Level", value: "High", icon: TrendingUp },
+      { label: "Anomaly Detection", value: "98.5%", icon: AlertTriangle },
+      { label: "Threat Intel Sources", value: "24/7", icon: Eye },
+    ],
+    gradient: "from-fuchsia-500/20 via-purple-500/10 to-fuchsia-900/20",
+    ringColor: "rgba(244, 114, 182, 0.3)",
+    glowColor: "rgba(244, 114, 182, 0.4)",
+    imageUrl: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&q=80",
+  },
+};
+
+const BackgroundGradient: React.FC<{ product: ProductData }> = ({ product }) => {
+  return (
+    <div
+      className={`absolute inset-0 bg-gradient-to-br ${product.gradient} opacity-60`}
+      style={{
+        background: `radial-gradient(circle at 30% 50%, ${product.glowColor}, transparent 50%),
+                     radial-gradient(circle at 70% 50%, ${product.glowColor}, transparent 50%)`,
+      }}
+    />
+  );
+};
+
+const ProductVisual: React.FC<{ product: ProductData; isActive: boolean }> = ({
+  product,
+  isActive,
+}) => {
+  return (
+    <div className="relative flex items-center justify-center h-full min-h-[400px]">
+      {/* Rotating dashed rings */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        {[1, 2, 3].map((ring) => {
+          const size = 120 + ring * 60;
+          return (
+            <motion.div
+              key={ring}
+              {...({
+                className: "absolute rounded-full border border-dashed",
+                style: {
+                  width: `${size}px`,
+                  height: `${size}px`,
+                  borderColor: product.ringColor,
+                },
+                animate: {
+                  rotate: isActive ? 360 : 0,
+                },
+                transition: {
+                  duration: 20 + ring * 5,
+                  repeat: Infinity,
+                  ease: "linear",
+                },
+              } as any)}
+            />
+          );
+        })}
+      </div>
+
+      {/* Floating object with glow */}
+      <motion.div
+        {...({
+          className: "relative z-10",
+          animate: {
+            y: isActive ? [0, -10, 0] : 0,
+            scale: isActive ? [1, 1.05, 1] : 1,
+          },
+          transition: {
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+          },
+        } as any)}
+      >
+        <div
+          className="relative w-48 h-48 rounded-2xl overflow-hidden border-2"
+          style={{
+            borderColor: product.ringColor,
+            boxShadow: `0 0 40px ${product.glowColor}, 0 0 80px ${product.glowColor}`,
+          }}
+        >
+          <img
+            src={product.imageUrl}
+            alt={product.title}
+            className="w-full h-full object-cover"
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `linear-gradient(135deg, ${product.glowColor}20, transparent)`,
+            }}
+          />
+        </div>
+      </motion.div>
+
+      {/* Ambient glow */}
+      <motion.div
+        {...({
+          className: "absolute inset-0 rounded-full blur-3xl",
+          style: {
+            background: `radial-gradient(circle, ${product.glowColor}, transparent 70%)`,
+          },
+          animate: {
+            opacity: isActive ? [0.3, 0.6, 0.3] : 0.2,
+            scale: isActive ? [1, 1.2, 1] : 1,
+          },
+          transition: {
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut",
+          },
+        } as any)}
+      />
+    </div>
+  );
+};
+
+const ProductDetails: React.FC<{ product: ProductData; isActive: boolean }> = ({
+  product,
+  isActive,
+}) => {
+  return (
+    <AnimatePresence mode="wait">
+      {isActive && (
+        <motion.div
+          key={product.id}
+          {...({
+            initial: { opacity: 0, y: 20 },
+            animate: { opacity: 1, y: 0 },
+            exit: { opacity: 0, y: -20 },
+            transition: { duration: 0.5 },
+            className: "space-y-6",
+          } as any)}
+        >
+          <div>
+            <h3 className="text-3xl font-light text-white mb-2">{product.title}</h3>
+            <p className="text-white/70 text-lg">{product.description}</p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            {product.features.map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <motion.div
+                  key={feature.label}
+                  {...({
+                    initial: { opacity: 0, x: -20 },
+                    animate: { opacity: 1, x: 0 },
+                    transition: { delay: index * 0.1 },
+                    className: "flex items-center gap-3 p-4 rounded-lg bg-white/5 border border-white/10",
+                  } as any)}
+                >
+                  <div
+                    className="p-2 rounded-lg"
+                    style={{
+                      backgroundColor: `${product.glowColor}20`,
+                    }}
+                  >
+                    <Icon className="w-5 h-5" style={{ color: product.glowColor }} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-xs text-white/60 uppercase tracking-wider mb-1">
+                      {feature.label}
+                    </div>
+                    <div className="text-lg font-semibold text-white">{feature.value}</div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+const Switcher: React.FC<{
+  activeProduct: ProductId;
+  onSwitch: (id: ProductId) => void;
+}> = ({ activeProduct, onSwitch }) => {
+  return (
+    <div className="flex items-center gap-2 p-1 bg-black/40 rounded-full border border-white/10">
+      {(["left", "right"] as ProductId[]).map((id) => {
+        const product = PRODUCT_DATA[id];
+        const isActive = activeProduct === id;
+        return (
+          <button
+            key={id}
+            onClick={() => onSwitch(id)}
+            className={`relative px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+              isActive ? "text-black" : "text-white/70"
+            }`}
+          >
+            <AnimatePresence>
+              {isActive && (
+                <motion.span
+                  layoutId="activeSwitcher"
+                  className="absolute inset-0 rounded-full bg-white"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                />
+              )}
+            </AnimatePresence>
+            <span className="relative z-10">{product.title}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
 };
 
 const SpatialProductShowcase: React.FC = () => {
-  const [activeSide, setActiveSide] = useState<"defense" | "intel">("defense");
+  const [activeProduct, setActiveProduct] = useState<ProductId>("left");
 
-  const defenseMetrics = [
-    { label: "MTTR", value: "22 min", width: "80%" },
-    { label: "Coverage", value: "96%", width: "88%" },
-    { label: "Response Rate", value: "99.2%", width: "92%" },
-  ];
-
-  const intelMetrics = [
-    { label: "Signals Correlated", value: "1.2M+", width: "82%" },
-    { label: "Threat Feeds", value: "48", width: "70%" },
-    { label: "Readiness", value: "High", width: "76%" },
-  ];
-
-  const isDefense = activeSide === "defense";
+  const currentProduct = PRODUCT_DATA[activeProduct];
+  const leftProduct = PRODUCT_DATA.left;
+  const rightProduct = PRODUCT_DATA.right;
 
   return (
-    <section className="mt-16 md:mt-20">
-      <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-cyan-900/30 via-slate-900/70 to-fuchsia-900/20 px-6 py-8 md:px-10 md:py-10">
-        {/* background accents */}
-        <div className="pointer-events-none absolute inset-0 opacity-60">
-          <div className="absolute -left-24 top-0 h-64 w-64 rounded-full bg-cyan-500/20 blur-3xl" />
-          <div className="absolute -right-20 bottom-0 h-72 w-72 rounded-full bg-fuchsia-500/15 blur-3xl" />
-        </div>
+    <section className="relative mt-16 md:mt-20">
+      <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#0a0a0f]">
+        <BackgroundGradient product={currentProduct} />
 
-        <div className="relative z-10 flex flex-col gap-10 lg:flex-row lg:items-stretch lg:gap-12">
-          {/* Left: title + toggle */}
-          <div className="flex w-full flex-col gap-6 lg:max-w-xs">
-            <p className="font-orbitron text-xs uppercase tracking-[0.4em] text-cyan-300/80">
+        <div className="relative z-10 p-8 md:p-12">
+          {/* Header */}
+          <div className="mb-8">
+            <p className="font-orbitron text-xs uppercase tracking-[0.4em] text-cyan-300/80 mb-2">
               Spatial Intelligence
             </p>
-            <h2 className="text-2xl font-light text-white md:text-3xl">
-              Defense Systems &amp; Threat Intelligence
+            <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
+              Intelligence Surface
             </h2>
-            <p className="text-sm text-white/70 md:text-base">
-              A dual-surface view of Hackiware's operational posture: hardened defense
-              systems on the left, live threat intelligence on the right.
-            </p>
+          </div>
 
-            <div className="mt-2 inline-flex items-center gap-1 rounded-full border border-white/10 bg-black/40 p-1 text-xs font-medium text-white/70">
-              <button
-                type="button"
-                onClick={() => setActiveSide("defense")}
-                className={`flex-1 rounded-full px-3 py-1.5 transition-colors ${
-                  isDefense ? "bg-white text-black" : "text-white/70"
-                }`}
-              >
-                Defense Systems
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveSide("intel")}
-                className={`flex-1 rounded-full px-3 py-1.5 transition-colors ${
-                  !isDefense ? "bg-white text-black" : "text-white/70"
-                }`}
-              >
-                Threat Intelligence
-              </button>
+          {/* Main content area */}
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-8">
+            {/* Left: Visual */}
+            <div className="order-2 lg:order-1">
+              <ProductVisual product={currentProduct} isActive={true} />
             </div>
 
-            <div className="mt-4 flex items-center gap-3 text-xs text-white/60">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5">
-                <LineChart className="h-4 w-4" />
-              </span>
-              <span>
-                Executive-ready view of security posture, tuned for Achievements &amp;
-                milestones.
-              </span>
+            {/* Right: Details */}
+            <div className="order-1 lg:order-2">
+              <ProductDetails product={currentProduct} isActive={true} />
             </div>
           </div>
 
-          {/* Right: spatial panels */}
-          <div className="grid w-full gap-6 lg:grid-cols-2">
-            {/* Defense Systems panel */}
-            <motion.div
-              key="defense-panel"
-              className={`relative flex flex-col justify-between rounded-2xl border border-white/10 bg-black/40 p-5 md:p-6 backdrop-blur-xl ${
-                isDefense ? "ring-1 ring-cyan-400/50" : "opacity-70"
-              }`}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: isDefense ? 1 : 0.8, y: 0 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-cyan-400/15 px-3 py-1 text-[11px] uppercase tracking-[0.26em] text-cyan-200">
-                    <ShieldCheck className="h-3.5 w-3.5" />
-                    Defense Systems
-                  </div>
-                  <p className="text-sm text-white/70">
-                    Live readiness of perimeter, internal, and identity controls.
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-4 space-y-3">
-                {defenseMetrics.map((metric) => (
-                  <motion.div
-                    key={metric.label}
-                    variants={metricVariants}
-                    initial="initial"
-                    animate="animate"
-                    className="space-y-1"
-                  >
-                    <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.22em] text-white/60">
-                      <span>{metric.label}</span>
-                      <span className="text-white/80">{metric.value}</span>
-                    </div>
-                    <div className="h-1.5 overflow-hidden rounded-full bg-white/5">
-                      <motion.div
-                        className="h-full rounded-full bg-gradient-to-r from-cyan-400 via-sky-400 to-emerald-400"
-                        animate={{ width: isDefense ? metric.width : "40%" }}
-                        transition={{ duration: 0.5, ease: "easeOut" }}
-                      />
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Threat Intelligence panel */}
-            <motion.div
-              key="intel-panel"
-              className={`relative flex flex-col justify-between rounded-2xl border border-white/10 bg-black/30 p-5 md:p-6 backdrop-blur-xl ${
-                !isDefense ? "ring-1 ring-fuchsia-400/50" : "opacity-75"
-              }`}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: !isDefense ? 1 : 0.85, y: 0 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-fuchsia-400/15 px-3 py-1 text-[11px] uppercase tracking-[0.26em] text-fuchsia-100">
-                    <Radar className="h-3.5 w-3.5" />
-                    Threat Intelligence
-                  </div>
-                  <p className="text-sm text-white/70">
-                    Correlated signals, anomalies, and hunting-ready insights.
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-4 space-y-3">
-                {intelMetrics.map((metric) => (
-                  <motion.div
-                    key={metric.label}
-                    variants={metricVariants}
-                    initial="initial"
-                    animate="animate"
-                    className="space-y-1"
-                  >
-                    <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.22em] text-white/60">
-                      <span>{metric.label}</span>
-                      <span className="text-white/80">{metric.value}</span>
-                    </div>
-                    <div className="h-1.5 overflow-hidden rounded-full bg-white/5">
-                      <motion.div
-                        className="h-full rounded-full bg-gradient-to-r from-fuchsia-400 via-violet-400 to-cyan-400"
-                        animate={{ width: !isDefense ? metric.width : "45%" }}
-                        transition={{ duration: 0.5, ease: "easeOut" }}
-                      />
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
+          {/* Switcher */}
+          <div className="flex justify-center">
+            <Switcher activeProduct={activeProduct} onSwitch={setActiveProduct} />
           </div>
         </div>
       </div>
@@ -182,3 +315,4 @@ const SpatialProductShowcase: React.FC = () => {
 };
 
 export default SpatialProductShowcase;
+
