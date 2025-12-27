@@ -3,36 +3,53 @@ import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
 
-const Login = () => {
+const Register = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { login, loginWithGoogle, loginWithGithub } = useAuth();
+  const { register, loginWithGoogle, loginWithGithub } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
+
+    // Client-side validation
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    if (name.trim().length < 2) {
+      setError("Name must be at least 2 characters.");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      await login(email, password);
+      await register(email, password, name.trim());
       navigate("/");
     } catch (err: any) {
       // Human-readable error messages
-      let errorMessage = "Failed to sign in. Please try again.";
+      let errorMessage = "Failed to create account. Please try again.";
       
-      if (err.code === "auth/user-not-found") {
-        errorMessage = "No account found with this email.";
-      } else if (err.code === "auth/wrong-password") {
-        errorMessage = "Incorrect password.";
+      if (err.code === "auth/email-already-in-use") {
+        errorMessage = "An account with this email already exists.";
       } else if (err.code === "auth/invalid-email") {
         errorMessage = "Invalid email address.";
-      } else if (err.code === "auth/too-many-requests") {
-        errorMessage = "Too many failed attempts. Please try again later.";
-      } else if (err.code === "auth/invalid-credential") {
-        errorMessage = "Invalid email or password.";
+      } else if (err.code === "auth/weak-password") {
+        errorMessage = "Password is too weak. Please use a stronger password.";
+      } else if (err.code === "auth/operation-not-allowed") {
+        errorMessage = "Email/password accounts are not enabled.";
       }
       
       setError(errorMessage);
@@ -90,13 +107,25 @@ const Login = () => {
         className="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl shadow-[0_0_40px_rgba(34,211,238,0.15)]"
       >
         <h1 className="font-orbitron text-2xl uppercase tracking-[0.4em] text-hacki-cyan mb-2">
-          Login
+          Register
         </h1>
         <p className="text-sm text-white/70 mb-8">
-          Access your Hackiware account
+          Create your Hackiware account
         </p>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div>
+            <input
+              type="text"
+              placeholder="Full Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              disabled={loading}
+              className="w-full rounded-full border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-cyan-400/50 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+          </div>
+
           <div>
             <input
               type="email"
@@ -112,9 +141,21 @@ const Login = () => {
           <div>
             <input
               type="password"
-              placeholder="Password"
+              placeholder="Password (min. 6 characters)"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
+              disabled={loading}
+              className="w-full rounded-full border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-cyan-400/50 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+          </div>
+
+          <div>
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               required
               disabled={loading}
               className="w-full rounded-full border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-cyan-400/50 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
@@ -141,7 +182,7 @@ const Login = () => {
               boxShadow: "0 0 18px rgba(34,211,238,0.2)",
             }}
           >
-            {loading ? "Signing in..." : "Login"}
+            {loading ? "Creating account..." : "Register"}
           </motion.button>
         </form>
 
@@ -200,12 +241,12 @@ const Login = () => {
         </div>
 
         <div className="mt-6 text-center text-sm text-white/60">
-          Don't have an account?{" "}
+          Already have an account?{" "}
           <Link
-            to="/register"
+            to="/login"
             className="text-cyan-400 hover:text-cyan-300 transition-colors underline underline-offset-2"
           >
-            Register
+            Login
           </Link>
         </div>
       </motion.div>
@@ -213,4 +254,5 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
+

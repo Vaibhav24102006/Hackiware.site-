@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { useRef, useEffect } from "react";
+import { AuthProvider } from "./context/AuthContext";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import Home from "./pages/Home";
@@ -9,6 +10,7 @@ import Achievements from "./pages/Achievements";
 import Events from "./pages/Events";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import PageWrapper from "./components/shared/PageWrapper";
 
 const routeOrder: Record<string, number> = {
@@ -18,6 +20,7 @@ const routeOrder: Record<string, number> = {
   "/events": 3,
   "/contact": 4,
   "/login": 5,
+  "/register": 6,
 };
 
 const AnimatedRoutes = () => {
@@ -83,23 +86,33 @@ const AnimatedRoutes = () => {
             </PageWrapper>
           }
         />
+        <Route
+          path="/register"
+          element={
+            <PageWrapper direction={direction}>
+              <Register />
+            </PageWrapper>
+          }
+        />
       </Routes>
     </AnimatePresence>
   );
 };
 
 const App = () => (
-  <div className="min-h-screen bg-[#050505] font-inter text-white">
-    <BrowserRouter>
-      <div className="flex min-h-screen flex-col">
-        <Header />
-        <main className="flex-1 pt-24 md:pt-28">
-          <AnimatedRoutes />
-        </main>
-        <Footer />
-      </div>
-    </BrowserRouter>
-  </div>
+  <AuthProvider>
+    <div className="min-h-screen bg-[#050505] font-inter text-white">
+      <BrowserRouter>
+        <div className="flex min-h-screen flex-col">
+          <Header />
+          <main className="flex-1 pt-24 md:pt-28">
+            <AnimatedRoutes />
+          </main>
+          <Footer />
+        </div>
+      </BrowserRouter>
+    </div>
+  </AuthProvider>
 );
 
 export default App;

@@ -3,6 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiMenuAlt3, HiX } from 'react-icons/hi';
 import { cn } from '../../lib/utils';
+import { useAuth } from '../../context/AuthContext';
+import { getUserByUid } from '../../firebase/services/users';
 
 const navLinks = [
     { label: 'HOME', path: '/' },
@@ -16,6 +18,8 @@ const Header = () => {
     const location = useLocation();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { user, logout } = useAuth();
+    const [userName, setUserName] = useState(null);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -25,6 +29,23 @@ const Header = () => {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    // Fetch user profile name when user is logged in
+    useEffect(() => {
+        if (user) {
+            getUserByUid(user.uid).then((profile) => {
+                if (profile) {
+                    setUserName(profile.name);
+                } else {
+                    setUserName(user.email?.split('@')[0] || 'User');
+                }
+            }).catch(() => {
+                setUserName(user.email?.split('@')[0] || 'User');
+            });
+        } else {
+            setUserName(null);
+        }
+    }, [user]);
 
     return (
         <>
@@ -87,15 +108,42 @@ const Header = () => {
 
                     {/* Actions */}
                     <div className="flex items-center gap-3 md:gap-4">
-                        <Link to="/login" className="hidden md:block">
-                            <motion.button
-                                whileHover={{ scale: 1.04 }}
-                                whileTap={{ scale: 0.96 }}
-                                className="rounded-full border border-white/15 bg-white/5 px-6 py-2 text-xs font-medium uppercase tracking-[0.22em] text-white/90 shadow-[0_0_18px_rgba(34,211,238,0.2)] transition-colors duration-300 hover:border-cyan-400/70 hover:bg-cyan-500/10 hover:text-cyan-200"
-                            >
-                                Login
-                            </motion.button>
-                        </Link>
+                        {user ? (
+                            <>
+                                <span className="hidden md:block text-xs font-medium text-white/80">
+                                    {userName || user.email?.split('@')[0] || 'User'}
+                                </span>
+                                <motion.button
+                                    onClick={logout}
+                                    whileHover={{ scale: 1.04 }}
+                                    whileTap={{ scale: 0.96 }}
+                                    className="hidden md:block rounded-full border border-white/15 bg-white/5 px-6 py-2 text-xs font-medium uppercase tracking-[0.22em] text-white/90 shadow-[0_0_18px_rgba(34,211,238,0.2)] transition-colors duration-300 hover:border-cyan-400/70 hover:bg-cyan-500/10 hover:text-cyan-200"
+                                >
+                                    Logout
+                                </motion.button>
+                            </>
+                        ) : (
+                            <>
+                                <Link to="/login" className="hidden md:block">
+                                    <motion.button
+                                        whileHover={{ scale: 1.04 }}
+                                        whileTap={{ scale: 0.96 }}
+                                        className="rounded-full border border-white/15 bg-white/5 px-6 py-2 text-xs font-medium uppercase tracking-[0.22em] text-white/90 shadow-[0_0_18px_rgba(34,211,238,0.2)] transition-colors duration-300 hover:border-cyan-400/70 hover:bg-cyan-500/10 hover:text-cyan-200"
+                                    >
+                                        Login
+                                    </motion.button>
+                                </Link>
+                                <Link to="/register" className="hidden md:block">
+                                    <motion.button
+                                        whileHover={{ scale: 1.04 }}
+                                        whileTap={{ scale: 0.96 }}
+                                        className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-6 py-2 text-xs font-medium uppercase tracking-[0.22em] text-cyan-200 shadow-[0_0_18px_rgba(34,211,238,0.3)] transition-colors duration-300 hover:border-cyan-400/50 hover:bg-cyan-500/20"
+                                    >
+                                        Register
+                                    </motion.button>
+                                </Link>
+                            </>
+                        )}
 
                         <button
                             onClick={() => setIsMobileMenuOpen(true)}
@@ -148,13 +196,39 @@ const Header = () => {
                                         {link.label}
                                     </Link>
                                 ))}
-                                <Link
-                                    to="/login"
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className="mt-6 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-center text-xs font-semibold uppercase tracking-[0.24em] text-white hover:border-cyan-400/70 hover:bg-cyan-500/10 hover:text-cyan-200"
-                                >
-                                    Login
-                                </Link>
+                                {user ? (
+                                    <>
+                                        <div className="mt-4 text-sm text-white/80">
+                                            {userName || user.email?.split('@')[0] || 'User'}
+                                        </div>
+                                        <button
+                                            onClick={() => {
+                                                logout();
+                                                setIsMobileMenuOpen(false);
+                                            }}
+                                            className="mt-2 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-center text-xs font-semibold uppercase tracking-[0.24em] text-white hover:border-cyan-400/70 hover:bg-cyan-500/10 hover:text-cyan-200"
+                                        >
+                                            Logout
+                                        </button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Link
+                                            to="/login"
+                                            onClick={() => setIsMobileMenuOpen(false)}
+                                            className="mt-6 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-center text-xs font-semibold uppercase tracking-[0.24em] text-white hover:border-cyan-400/70 hover:bg-cyan-500/10 hover:text-cyan-200"
+                                        >
+                                            Login
+                                        </Link>
+                                        <Link
+                                            to="/register"
+                                            onClick={() => setIsMobileMenuOpen(false)}
+                                            className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-6 py-3 text-center text-xs font-semibold uppercase tracking-[0.24em] text-cyan-200 hover:border-cyan-400/50 hover:bg-cyan-500/20"
+                                        >
+                                            Register
+                                        </Link>
+                                    </>
+                                )}
                             </nav>
                         </motion.div>
                     </>
