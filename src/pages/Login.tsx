@@ -11,6 +11,33 @@ const Login = () => {
   const { login, loginWithGoogle, loginWithGithub } = useAuth();
   const navigate = useNavigate();
 
+  const mapFirebaseAuthError = (errorCode: string) => {
+    switch (errorCode) {
+      case "auth/popup-closed-by-user":
+        return "Sign-in popup was closed.";
+      case "auth/cancelled-popup-request":
+        return "Sign-in was cancelled.";
+      case "auth/account-exists-with-different-credential":
+        return "An account already exists with this email using a different sign-in method.";
+      case "auth/operation-not-allowed":
+        return "This sign-in method is currently disabled. Please contact support.";
+      case "auth/unauthorized-domain":
+        return "This domain is not authorized for OAuth operations.";
+      case "auth/user-not-found":
+        return "No account found with this email.";
+      case "auth/wrong-password":
+        return "Incorrect password.";
+      case "auth/invalid-email":
+        return "Invalid email address.";
+      case "auth/too-many-requests":
+        return "Too many failed attempts. Please try again later.";
+      case "auth/invalid-credential":
+        return "Invalid email or password.";
+      default:
+        return `Error: ${errorCode}`;
+    }
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
@@ -20,22 +47,8 @@ const Login = () => {
       await login(email, password);
       navigate("/");
     } catch (err: any) {
-      // Human-readable error messages
-      let errorMessage = "Failed to sign in. Please try again.";
-      
-      if (err.code === "auth/user-not-found") {
-        errorMessage = "No account found with this email.";
-      } else if (err.code === "auth/wrong-password") {
-        errorMessage = "Incorrect password.";
-      } else if (err.code === "auth/invalid-email") {
-        errorMessage = "Invalid email address.";
-      } else if (err.code === "auth/too-many-requests") {
-        errorMessage = "Too many failed attempts. Please try again later.";
-      } else if (err.code === "auth/invalid-credential") {
-        errorMessage = "Invalid email or password.";
-      }
-      
-      setError(errorMessage);
+      console.error("Login component caught error:", err.code, err.message);
+      setError(mapFirebaseAuthError(err.code));
     } finally {
       setLoading(false);
     }
@@ -48,13 +61,23 @@ const Login = () => {
       await loginWithGoogle();
       navigate("/");
     } catch (err: any) {
-      let errorMessage = "Failed to sign in with Google.";
-      if (err.code === "auth/popup-closed-by-user") {
-        errorMessage = "Sign-in popup was closed.";
-      } else if (err.code === "auth/cancelled-popup-request") {
-        errorMessage = "Sign-in was cancelled.";
+      // Log complete error details
+      console.error("=== GOOGLE LOGIN ERROR DEBUG ===");
+      console.error("Error code:", err.code);
+      console.error("Error message:", err.message);
+      console.error("Error full object:", err);
+      if (err.customData) {
+        console.error("Custom data:", err.customData);
       }
-      setError(errorMessage);
+      if (err.credential) {
+        console.error("Credential:", err.credential);
+      }
+      console.error("=================================");
+      
+      // Show exact error code + human-readable message
+      const errorCode = err.code || "unknown";
+      const humanMessage = mapFirebaseAuthError(errorCode);
+      setError(`${humanMessage} [Code: ${errorCode}]`);
     } finally {
       setLoading(false);
     }
@@ -67,15 +90,23 @@ const Login = () => {
       await loginWithGithub();
       navigate("/");
     } catch (err: any) {
-      let errorMessage = "Failed to sign in with GitHub.";
-      if (err.code === "auth/popup-closed-by-user") {
-        errorMessage = "Sign-in popup was closed.";
-      } else if (err.code === "auth/cancelled-popup-request") {
-        errorMessage = "Sign-in was cancelled.";
-      } else if (err.code === "auth/account-exists-with-different-credential") {
-        errorMessage = "An account already exists with this email using a different sign-in method.";
+      // Log complete error details
+      console.error("=== GITHUB LOGIN ERROR DEBUG ===");
+      console.error("Error code:", err.code);
+      console.error("Error message:", err.message);
+      console.error("Error full object:", err);
+      if (err.customData) {
+        console.error("Custom data:", err.customData);
       }
-      setError(errorMessage);
+      if (err.credential) {
+        console.error("Credential:", err.credential);
+      }
+      console.error("=================================");
+      
+      // Show exact error code + human-readable message
+      const errorCode = err.code || "unknown";
+      const humanMessage = mapFirebaseAuthError(errorCode);
+      setError(`${humanMessage} [Code: ${errorCode}]`);
     } finally {
       setLoading(false);
     }
@@ -214,3 +245,5 @@ const Login = () => {
 };
 
 export default Login;
+
+

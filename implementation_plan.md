@@ -1,28 +1,46 @@
-# Implementation Plan - Restore Hackiware Aesthetics
+# Implementation Plan - Hackiware UI Fixes & Features
+
+## Goal Description
+Fix critical UI layout bugs on the homepage, resolve OAuth login failures for Google/GitHub, and transition the Contact page to a read-only Cybersecurity Blog.
 
 ## User Review Required
-- **Visual Changes**: Significant changes to Header and Hero sections to match "old Hackiware" and "Anant Vega" styles.
-- **Dependencies**: Ensuring `@splinetool/runtime`, `@splinetool/react-spline`, `framer-motion` are installed.
+> [!IMPORTANT]
+> The "Contact" page will be replaced by "Blog". Ensure no critical contact functionality is lost. The scope is strictly "Replace".
 
 ## Proposed Changes
 
-### UI Components
-#### [NEW] src/components/ui
-- `spline.tsx`: Spline 3D scene component with lazy loading.
-- `spotlight-aceternity.tsx`: Aceternity spotlight component.
-- `spotlight-ibelick.tsx`: IBelick spotlight component.
+### Part A: Hero Section Layout Fix
+#### [MODIFY] [Hero.jsx](file:///c:/Users/victus/OneDrive/Desktop/Hackiware_old/src/components/sections/Hero.jsx)
+- **Refactor**: Change text wrapper to `flex flex-col` for stacking context.
+- **Layout**: Ensure animations have reserved space.
+- **Cleanup**: Remove absolute positioning on text elements if present.
 
-### Layout
-#### [MODIFY] src/components/layout/Header.jsx
-- Rebuild to match "Anant Vega" styling.
-- Glassmorphism, neon hover, sticky positioning, specific logo assets.
+### Part B: OAuth Fixes
+#### [MODIFY] [AuthContext.tsx](file:///c:/Users/victus/OneDrive/Desktop/Hackiware_old/src/context/AuthContext.tsx)
+- **Error Handling**: Enhance `catch` block in login functions to map Firebase errors to user-friendly messages.
+- **Sync Safety**: Ensure `createUserProfile` is only called if `getUserByUid` returns null (already implemented, but will double-check and add robust error logging).
+- **Map Errors**: Create a helper to map `auth/popup-closed-by-user`, etc.
 
-### Sections
-#### [MODIFY] src/components/sections/Hero.jsx
-- Integrate `SplineScene` on the right logic.
-- Restore parallax mouse, scroll depth, Z-motion.
-- Update styling for transparency and neon glow.
+#### [MODIFY] [Login.tsx](file:///c:/Users/victus/OneDrive/Desktop/Hackiware_old/src/pages/Login.tsx)
+- **UI**: Add specific error message display.
+- **UX**: Disable buttons while loading to prevent double-click.
 
-### Global Styles
-#### [MODIFY] src/index.css / tailwind.config.js
-- Ensure dark theme, neon colors, and animations are available.
+### Part C: Blog Feature
+#### [NEW] [Blog.tsx](file:///c:/Users/victus/OneDrive/Desktop/Hackiware_old/src/pages/Blog.tsx)
+- New page component for the Blog feed.
+- Fetch from 'posts' collection (type: 'blog').
+- Read-only card layout.
+
+#### [MODIFY] [App.tsx](file:///c:/Users/victus/OneDrive/Desktop/Hackiware_old/src/App.tsx)
+- **Routes**: Change `/contact` to `/blog`.
+- **Navigation**: Update Header (if links are there) or just the route.
+
+#### [MODIFY] [Header.jsx](file:///c:/Users/victus/OneDrive/Desktop/Hackiware_old/src/components/layout/Header.jsx)
+- Update "Contact" link to "Blog".
+
+## Verification Plan
+
+### Manual Verification
+- **Hero Layout**: Resize window to 375px, 768px, 1024px, 1440px. Check for text overlap.
+- **Auth**: Test `signInWithPopup`. Check console for "OAuth error". Verify user creation in Firestore (mock check or console log).
+- **Blog**: Navigate to `/blog`. Verify cards load.

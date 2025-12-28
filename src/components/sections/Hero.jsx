@@ -58,20 +58,25 @@ const Hero = () => {
           animate="visible"
           className="mx-auto max-w-4xl"
         >
-          <div className="space-y-6">
-            <motion.div
-              variants={button}
-              className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 backdrop-blur-sm"
-            >
-              <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
-              <span className="font-orbitron text-xs uppercase tracking-[0.3em] text-cyan-300">
-                Hackiware Research Division
-              </span>
-            </motion.div>
+          <div className="flex flex-col gap-6">
+            {/* Reserved space for animated badge/cursor element */}
+            <div className="flex min-h-[3rem] items-center">
+              <motion.div
+                layout
+                variants={button}
+                className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 backdrop-blur-sm w-fit"
+              >
+                <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
+                <span className="font-orbitron text-xs uppercase tracking-[0.3em] text-cyan-300">
+                  Hackiware Research Division
+                </span>
+              </motion.div>
+            </div>
 
             <motion.h1
+              layout
               variants={heading}
-              className="text-5xl font-light leading-tight text-white sm:text-6xl md:text-7xl lg:text-8xl"
+              className="text-5xl font-light leading-tight text-white sm:text-6xl md:text-7xl lg:text-8xl relative z-10"
             >
               Securing the{' '}
               <span className="block bg-gradient-to-r from-cyan-400 via-sky-400 to-fuchsia-500 bg-clip-text font-medium text-transparent">
@@ -80,14 +85,16 @@ const Hero = () => {
             </motion.h1>
 
             <motion.p
+              layout
               variants={paragraph}
-              className="max-w-2xl text-lg leading-relaxed text-white/80 md:text-xl"
+              className="max-w-2xl text-lg leading-relaxed text-white/80 md:text-xl relative z-10"
             >
-              A cybersecurity research collective preparing for national-scale events. 
+              A cybersecurity research collective preparing for national-scale events.
               Building defense systems through innovation, collaboration, and expertise.
             </motion.p>
 
             <motion.div
+              layout
               variants={button}
               className="flex flex-wrap items-center gap-4 pt-4"
             >

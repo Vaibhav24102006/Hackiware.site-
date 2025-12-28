@@ -65,13 +65,34 @@ const Register = () => {
       await loginWithGoogle();
       navigate("/");
     } catch (err: any) {
-      let errorMessage = "Failed to sign in with Google.";
-      if (err.code === "auth/popup-closed-by-user") {
-        errorMessage = "Sign-in popup was closed.";
-      } else if (err.code === "auth/cancelled-popup-request") {
-        errorMessage = "Sign-in was cancelled.";
+      // Log complete error details
+      console.error("=== GOOGLE LOGIN ERROR DEBUG ===");
+      console.error("Error code:", err.code);
+      console.error("Error message:", err.message);
+      console.error("Error full object:", err);
+      if (err.customData) {
+        console.error("Custom data:", err.customData);
       }
-      setError(errorMessage);
+      if (err.credential) {
+        console.error("Credential:", err.credential);
+      }
+      console.error("=================================");
+      
+      // Show exact error code + human-readable message
+      const errorCode = err.code || "unknown";
+      let humanMessage = "Failed to sign in with Google.";
+      if (errorCode === "auth/popup-closed-by-user") {
+        humanMessage = "Sign-in popup was closed.";
+      } else if (errorCode === "auth/cancelled-popup-request") {
+        humanMessage = "Sign-in was cancelled.";
+      } else if (errorCode === "auth/operation-not-allowed") {
+        humanMessage = "Google sign-in is not enabled. Please contact support.";
+      } else if (errorCode === "auth/unauthorized-domain") {
+        humanMessage = "This domain is not authorized for Google sign-in.";
+      } else if (errorCode === "auth/account-exists-with-different-credential") {
+        humanMessage = "An account already exists with this email using a different sign-in method.";
+      }
+      setError(`${humanMessage} [Code: ${errorCode}]`);
     } finally {
       setLoading(false);
     }
@@ -84,15 +105,34 @@ const Register = () => {
       await loginWithGithub();
       navigate("/");
     } catch (err: any) {
-      let errorMessage = "Failed to sign in with GitHub.";
-      if (err.code === "auth/popup-closed-by-user") {
-        errorMessage = "Sign-in popup was closed.";
-      } else if (err.code === "auth/cancelled-popup-request") {
-        errorMessage = "Sign-in was cancelled.";
-      } else if (err.code === "auth/account-exists-with-different-credential") {
-        errorMessage = "An account already exists with this email using a different sign-in method.";
+      // Log complete error details
+      console.error("=== GITHUB LOGIN ERROR DEBUG ===");
+      console.error("Error code:", err.code);
+      console.error("Error message:", err.message);
+      console.error("Error full object:", err);
+      if (err.customData) {
+        console.error("Custom data:", err.customData);
       }
-      setError(errorMessage);
+      if (err.credential) {
+        console.error("Credential:", err.credential);
+      }
+      console.error("=================================");
+      
+      // Show exact error code + human-readable message
+      const errorCode = err.code || "unknown";
+      let humanMessage = "Failed to sign in with GitHub.";
+      if (errorCode === "auth/popup-closed-by-user") {
+        humanMessage = "Sign-in popup was closed.";
+      } else if (errorCode === "auth/cancelled-popup-request") {
+        humanMessage = "Sign-in was cancelled.";
+      } else if (errorCode === "auth/operation-not-allowed") {
+        humanMessage = "GitHub sign-in is not enabled. Please contact support.";
+      } else if (errorCode === "auth/unauthorized-domain") {
+        humanMessage = "This domain is not authorized for GitHub sign-in.";
+      } else if (errorCode === "auth/account-exists-with-different-credential") {
+        humanMessage = "An account already exists with this email using a different sign-in method.";
+      }
+      setError(`${humanMessage} [Code: ${errorCode}]`);
     } finally {
       setLoading(false);
     }

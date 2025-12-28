@@ -34,7 +34,7 @@ const QuoteSection = () => {
   return (
     <section className="relative bg-gradient-to-b from-[#050505] via-[#0a0a0f] to-[#050505] py-20 md:py-32">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(0,224,255,0.08),_transparent_70%)]" />
-      
+
       <div className="container relative z-10 mx-auto px-6">
         <motion.div
           variants={container}
@@ -42,20 +42,26 @@ const QuoteSection = () => {
           animate="visible"
           className="mx-auto max-w-6xl"
         >
-          <div className="grid gap-12 md:grid-cols-[200px_1fr] lg:grid-cols-[240px_1fr] md:gap-16">
-            <motion.div variants={heading} className="flex flex-col">
+          {/* Single flex column container - no overlap */}
+          <div className="flex flex-col gap-8 md:gap-12">
+            {/* Heading - reserved space */}
+            <motion.div variants={heading} className="flex-shrink-0">
               <div className="font-orbitron text-4xl md:text-5xl lg:text-6xl font-bold text-white/90 leading-none tracking-tight">
                 HACKIWARE
               </div>
             </motion.div>
 
-            <div className="hidden md:block absolute left-[200px] lg:left-[240px] top-0 bottom-0 w-px bg-white/10" />
+            {/* Divider - only on desktop, in flow */}
+            <div className="hidden md:block h-px w-full bg-white/10" />
 
-            <div className="relative pl-0 md:pl-8 lg:pl-12">
-              <div className="text-6xl md:text-7xl lg:text-8xl font-light text-cyan-400/30 leading-none mb-4 -mt-2">
+            {/* Quote content - reserved space, no absolute positioning */}
+            <div className="flex-shrink-0">
+              {/* Quote mark - in flow, reserved space */}
+              <div className="text-6xl md:text-7xl lg:text-8xl font-light text-cyan-400/30 leading-none mb-6 h-16 md:h-20 lg:h-24 flex items-start">
                 "
               </div>
-              
+
+              {/* Paragraphs - in flow, reserved space */}
               <div className="space-y-6 text-white/80 text-base md:text-lg leading-relaxed">
                 <motion.p variants={paragraph}>
                   At Hackiware, we build immersive cybersecurity experiences that bridge theory and real-world defense.

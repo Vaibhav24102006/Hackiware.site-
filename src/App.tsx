@@ -8,7 +8,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Achievements from "./pages/Achievements";
 import Events from "./pages/Events";
-import Contact from "./pages/Contact";
+import Blog from "./pages/Blog";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import PageWrapper from "./components/shared/PageWrapper";
@@ -18,7 +18,7 @@ const routeOrder: Record<string, number> = {
   "/about": 1,
   "/achievements": 2,
   "/events": 3,
-  "/contact": 4,
+  "/blog": 4,
   "/login": 5,
   "/register": 6,
 };
@@ -71,10 +71,10 @@ const AnimatedRoutes = () => {
           }
         />
         <Route
-          path="/contact"
+          path="/blog"
           element={
             <PageWrapper direction={direction}>
-              <Contact />
+              <Blog />
             </PageWrapper>
           }
         />

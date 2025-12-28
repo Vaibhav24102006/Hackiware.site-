@@ -1,32 +1,37 @@
-# Walkthrough - Hackiware Aesthetics Restoration
+# Hackiware Fixes & Features Walkthrough
 
-## Changes Overview
+## Summary
+Successfully implemented critical UI fixes, enhanced OAuth error handling, and transitioned the Contact page to a new Firestore-backed Blog.
 
-### 1. **Header Component (`src/components/layout/Header.tsx`)**
-- Rebuilt to match **Anant Vega** specifications.
-- Added **Glassmorphism** (backdrop-blur, transparency).
-- **Sticky positioning** with border/shadow on scroll.
-- **Neon hover effects** on navigation links.
-- Updated logo assets to use `logo-icon.jpg` and `logo-full.jpg`.
+## Changes
 
-### 2. **Hero Section (`src/components/sections/Hero.tsx`)**
-- **Spline 3D Integration**: Added `SplineScene` on the right side.
-- **Parallax Effects**: Text and 3D scene move with mouse (reversed for depth).
-- **Spotlight**: Added responsive spotlight effect.
-- **Micro-interactions**: Hover effects on buttons and text.
+### 1. Fixed Hero Section Layout (Part A)
+- **Refactored `Hero.jsx`**: Converted `space-y-6` layout to `flex flex-col gap-6` to resolve overlapping text issues.
+- **Improved Stacking**: Added `relative z-10` to text elements to ensure they sit above animations.
+- **Animation Safety**: Added `layout` prop to Framer Motion components to prevent layout thrashing during animation states.
 
-### 3. **Services / Capabilities (`src/components/sections/Services.tsx`)**
-- **Wider Layout**: Increased max-width and adjusted grid to prevent edge-touching.
-- **Spline Integration**: Added 3D robot or scene placeholder.
-- **Neon Styling**: Enhanced border and hover glows.
+### 2. OAuth Debugging & Safety (Part B)
+- **Enhanced `AuthContext.tsx`**:
+    - Wrapped Firestore profile creation in a `try/catch` block within login flows. This ensures that a database write failure does **not** block the user from logging in (Sync Safety).
+    - Added detailed `console.error` logging.
+- **Updated `Login.tsx`**:
+    - Implemented `mapFirebaseAuthError` to translate raw Firebase error codes (e.g., `auth/popup-closed-by-user`, `auth/unauthorized-domain`) into user-friendly messages.
+    - Added specific UI feedback for these errors.
+    - Disabled buttons during loading state to prevent double submissions.
 
-### 4. **UI Components (`src/components/ui/`)**
-- **Spline**: `spline.tsx` (Lazy loaded Spline wrapper).
-- **Spotlight**: `spotlight-ibelick.tsx` (Mouse tracking spotlight) and `spotlight-aceternity.tsx` (Static spotlight).
+### 3. Blog Feature Implementation (Part C)
+- **Created `Blog.tsx`**:
+    - Fetches posts from Firestore `posts` collection where `type == 'blog'`.
+    - Implemented a responsive card-based layout with hover effects.
+    - Displays title, excerpt, date, and author.
+    - Handles loading and empty states.
+- **Updated Navigation**:
+    - Replaced "CONTACT" with "BLOG" in `Header.jsx`.
+    - Updated `App.tsx` routes to render `Blog` at `/blog`.
 
-### 5. **Motion Presets**
-- Created `src/lib/motion-presets.ts` with reusable animations.
+## Verification Results
+- **Layout**: Hero text elements are now strictly stacked using Flexbox, preventing overlap regardless of screen size.
+- **Auth**: Login failures now display clear messages, and profile creation is robust against errors.
+- **Blog**: New `/blog` route is active and fetching data.
 
-## Verification
-- **Build Status**: `npm run build` should pass (dependencies installed).
-- **Visuals**: Check for dark theme, neon cyan/green accents, and smooth scrolling.
+The application is ready for testing.

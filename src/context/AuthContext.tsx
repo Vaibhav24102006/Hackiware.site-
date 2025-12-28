@@ -86,17 +86,37 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const firebaseUser = result.user;
 
       // Check if user profile exists, create if not
-      const existingProfile = await getUserByUid(firebaseUser.uid);
-      if (!existingProfile) {
-        await createUserProfile({
-          uid: firebaseUser.uid,
-          name: firebaseUser.displayName || "User",
-          email: firebaseUser.email || "",
-          role: "member",
-        });
+      // Firestore write is isolated - won't fail auth if it errors
+      try {
+        const existingProfile = await getUserByUid(firebaseUser.uid);
+        if (!existingProfile) {
+          await createUserProfile({
+            uid: firebaseUser.uid,
+            name: firebaseUser.displayName || "User",
+            email: firebaseUser.email || "",
+            role: "member",
+          });
+        }
+      } catch (firestoreError: any) {
+        // Log Firestore error but don't fail auth
+        console.error("Firestore profile creation error (non-blocking):", firestoreError);
+        console.error("Firestore error code:", firestoreError?.code);
+        console.error("Firestore error message:", firestoreError?.message);
       }
-    } catch (error) {
-      console.error("Google login error:", error);
+    } catch (error: any) {
+      // Comprehensive error logging
+      console.error("=== GOOGLE AUTH ERROR (AuthContext) ===");
+      console.error("Error code:", error.code);
+      console.error("Error message:", error.message);
+      console.error("Error full object:", error);
+      if (error.customData) {
+        console.error("Custom data:", error.customData);
+        console.error("Custom data email:", error.customData?.email);
+      }
+      if (error.credential) {
+        console.error("Credential:", error.credential);
+      }
+      console.error("=======================================");
       throw error;
     }
   };
@@ -108,17 +128,37 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const firebaseUser = result.user;
 
       // Check if user profile exists, create if not
-      const existingProfile = await getUserByUid(firebaseUser.uid);
-      if (!existingProfile) {
-        await createUserProfile({
-          uid: firebaseUser.uid,
-          name: firebaseUser.displayName || "User",
-          email: firebaseUser.email || "",
-          role: "member",
-        });
+      // Firestore write is isolated - won't fail auth if it errors
+      try {
+        const existingProfile = await getUserByUid(firebaseUser.uid);
+        if (!existingProfile) {
+          await createUserProfile({
+            uid: firebaseUser.uid,
+            name: firebaseUser.displayName || "User",
+            email: firebaseUser.email || "",
+            role: "member",
+          });
+        }
+      } catch (firestoreError: any) {
+        // Log Firestore error but don't fail auth
+        console.error("Firestore profile creation error (non-blocking):", firestoreError);
+        console.error("Firestore error code:", firestoreError?.code);
+        console.error("Firestore error message:", firestoreError?.message);
       }
-    } catch (error) {
-      console.error("GitHub login error:", error);
+    } catch (error: any) {
+      // Comprehensive error logging
+      console.error("=== GITHUB AUTH ERROR (AuthContext) ===");
+      console.error("Error code:", error.code);
+      console.error("Error message:", error.message);
+      console.error("Error full object:", error);
+      if (error.customData) {
+        console.error("Custom data:", error.customData);
+        console.error("Custom data email:", error.customData?.email);
+      }
+      if (error.credential) {
+        console.error("Credential:", error.credential);
+      }
+      console.error("=======================================");
       throw error;
     }
   };
