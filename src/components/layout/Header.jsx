@@ -80,6 +80,7 @@ const Header = () => {
                     <nav className="hidden md:flex items-center gap-10 text-[11px] font-medium tracking-[0.28em] uppercase">
                         {navLinks.map((link) => {
                             const isActive = location.pathname === link.path;
+                            const displayLabel = link.path === '/blog' && location.pathname === '/blog' ? 'CONTACT' : link.label;
                             return (
                                 <Link
                                     key={link.path}
@@ -92,7 +93,7 @@ const Header = () => {
                                             isActive ? 'text-cyan-300' : 'text-slate-300/70 group-hover:text-cyan-200'
                                         )}
                                     >
-                                        {link.label}
+                                        {displayLabel}
                                     </span>
                                     <span
                                         className={cn(
@@ -186,16 +187,19 @@ const Header = () => {
                             </div>
 
                             <nav className="flex flex-col gap-6">
-                                {navLinks.map((link) => (
-                                    <Link
-                                        key={link.path}
-                                        to={link.path}
-                                        onClick={() => setIsMobileMenuOpen(false)}
-                                        className="text-sm font-medium uppercase tracking-[0.24em] text-gray-300 hover:text-cyan-300"
-                                    >
-                                        {link.label}
-                                    </Link>
-                                ))}
+                                {navLinks.map((link) => {
+                                    const displayLabel = link.path === '/blog' && location.pathname === '/blog' ? 'CONTACT' : link.label;
+                                    return (
+                                        <Link
+                                            key={link.path}
+                                            to={link.path}
+                                            onClick={() => setIsMobileMenuOpen(false)}
+                                            className="text-sm font-medium uppercase tracking-[0.24em] text-gray-300 hover:text-cyan-300"
+                                        >
+                                            {displayLabel}
+                                        </Link>
+                                    );
+                                })}
                                 {user ? (
                                     <>
                                         <div className="mt-4 text-sm text-white/80">

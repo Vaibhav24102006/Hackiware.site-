@@ -78,20 +78,11 @@ const Hero = () => {
               variants={heading}
               className="text-5xl font-light leading-tight text-white sm:text-6xl md:text-7xl lg:text-8xl relative z-10"
             >
-              Securing the{' '}
+              <span className="block">Hackiware —</span>
               <span className="block bg-gradient-to-r from-cyan-400 via-sky-400 to-fuchsia-500 bg-clip-text font-medium text-transparent">
-                Digital Frontier
+                Empowering the next generation in cybersecurity
               </span>
             </motion.h1>
-
-            <motion.p
-              layout
-              variants={paragraph}
-              className="max-w-2xl text-lg leading-relaxed text-white/80 md:text-xl relative z-10"
-            >
-              A cybersecurity research collective preparing for national-scale events.
-              Building defense systems through innovation, collaboration, and expertise.
-            </motion.p>
 
             <motion.div
               layout

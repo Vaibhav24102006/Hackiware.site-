@@ -5,6 +5,7 @@ import {
   rightSectionVariants,
   reducedMotionSectionVariants,
 } from '../lib/routeAnimations';
+import GlassyButton from '../components/ui/GlassyButton';
 
 const prefersReducedMotion = (): boolean => {
   if (typeof window === 'undefined') return false;
@@ -50,15 +51,33 @@ const Contact = () => {
           viewport={{ once: true, margin: "-100px" }}
         >
           <p className="mt-4 text-white/70 md:mt-0">
-            Drop us a line at{" "}
+            For partnerships, workshops, institutional collaborations, or technical inquiries, email us at
             <a
               href="mailto:hello@hackiware.com"
-              className="text-hacki-green underline"
+              className="text-hacki-green underline ml-2"
             >
               hello@hackiware.com
-            </a>{" "}
-            or plug your preferred form here. We typically respond within 48 hours.
+            </a>
           </p>
+
+          <p className="mt-4 text-white/70">Location: New Delhi, India</p>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            <div className="rounded-lg border border-white/8 bg-white/3 p-4">
+              <h4 className="text-white font-semibold">Institution Partnerships</h4>
+              <p className="text-white/70 text-sm">We co-develop curricula, run campus simulations, and provide instructor training.</p>
+            </div>
+            <div className="rounded-lg border border-white/8 bg-white/3 p-4">
+              <h4 className="text-white font-semibold">Industry Collaboration</h4>
+              <p className="text-white/70 text-sm">Sponsor events, mentor students, and help shape practical assessments.</p>
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <GlassyButton href="mailto:hello@hackiware.com" glowColor="#00FF85">
+              Collaborate with Us
+            </GlassyButton>
+          </div>
         </motion.div>
       </div>
     </section>

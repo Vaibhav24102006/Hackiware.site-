@@ -7,24 +7,26 @@ export const MissionVisionValues = () => (
         <ValueCard
           icon={<Shield />}
           title="Mission"
-          text="To create hands-on cybersecurity environments that train
-          students to think like attackers and defend like professionals."
+          text="To build rigorous, hands-on cybersecurity training environments that produce professionals
+          capable of anticipating, detecting, and mitigating real-world threats. We prioritize practical
+          skill transfer and ethical responsibility over theoretical checklists."
           delay={0.0}
         />
 
         <ValueCard
           icon={<Brain />}
           title="Vision"
-          text="A future where cybersecurity education is experiential,
-          realistic, and aligned with how threats actually evolve."
+          text="A future in which cybersecurity education is immersive, industry-aligned and continuously
+          iterated based on threat intelligence—so learners graduate ready for operational roles.
+          We envision an open, collaborative ecosystem of learners and practitioners protecting critical systems."
           delay={0.15}
         />
 
         <ValueCard
           icon={<Infinity />}
           title="Values"
-          text="Integrity, realism, community learning, and technical depth
-          over surface-level certification culture."
+          text="Integrity, technical depth, community mentorship, and measurable impact. We favor
+          reproducible learning, transparent practices, and long-term capability-building over short-term optics."
           delay={0.3}
         />
       </div>
