@@ -9,6 +9,7 @@ import About from "./pages/About";
 import Achievements from "./pages/Achievements";
 import Events from "./pages/Events";
 import Blog from "./pages/Blog";
+import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import PageWrapper from "./components/shared/PageWrapper";
@@ -74,7 +75,7 @@ const AnimatedRoutes = () => {
           path="/blog"
           element={
             <PageWrapper direction={direction}>
-              <Blog />
+              <Contact />
             </PageWrapper>
           }
         />
