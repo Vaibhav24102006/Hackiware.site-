@@ -11,6 +11,8 @@ import {
   Zap,
   Eye,
   Layers,
+  GraduationCap,
+  Handshake,
 } from "lucide-react";
 
 type ProductId = "left" | "right";
@@ -35,36 +37,67 @@ interface ProductData {
 const PRODUCT_DATA: Record<ProductId, ProductData> = {
   left: {
     id: "left",
-    title: "Defense Systems",
-    description: "Hardened perimeter, identity, and internal security controls with real-time threat response.",
+    title: "Learning Domains",
+    description:
+      "Core, hands-on domains Hackiware teaches — practical skills that map directly to real-world roles.",
     features: [
-      { label: "MTTR", value: "22 min", icon: Zap },
-      { label: "Coverage %", value: "96%", icon: ShieldCheck },
-      { label: "Response Rate", value: "99.2%", icon: Activity },
-      { label: "Perimeter Controls", value: "Active", icon: Lock },
-      { label: "Identity Controls", value: "Active", icon: Network },
-      { label: "Internal Controls", value: "Active", icon: Layers },
+      {
+        label: "Offensive Security",
+        value: "Guided exploit development, web/binary CTFs, and red-team tactics focused on learning by doing.",
+        icon: Zap,
+      },
+      {
+        label: "Defensive Security",
+        value: "Incident response, detection engineering, and hands-on blue-team playbooks.",
+        icon: ShieldCheck,
+      },
+      {
+        label: "Threat Intelligence",
+        value: "Evidence-driven hunting, feed analysis, and translating signals into teachable exercises.",
+        icon: Radar,
+      },
+      {
+        label: "Cybersecurity Education",
+        value: "Curriculum design, instructor training, and lab-based assessments that scale learning.",
+        icon: GraduationCap,
+      },
     ],
     gradient: "from-cyan-500/20 via-blue-500/10 to-cyan-900/20",
-    ringColor: "rgba(34, 211, 238, 0.3)",
-    glowColor: "rgba(34, 211, 238, 0.4)",
-    imageUrl: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80",
+    ringColor: "rgba(34, 211, 238, 0.18)",
+    glowColor: "rgba(34, 211, 238, 0.28)",
+    imageUrl: "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=800&q=80",
   },
   right: {
     id: "right",
-    title: "Threat Intelligence",
-    description: "Correlated signals, anomaly detection, and hunting-ready insights from global threat feeds.",
+    title: "Applied Programs",
+    description:
+      "Hands-on programs and initiatives where learners apply domain skills: workshops, CTFs, simulations, and partnerships.",
     features: [
-      { label: "Signals Correlated", value: "1.2M+", icon: Radar },
-      { label: "Threat Feeds", value: "48", icon: Network },
-      { label: "Readiness Level", value: "High", icon: TrendingUp },
-      { label: "Anomaly Detection", value: "98.5%", icon: AlertTriangle },
-      { label: "Threat Intel Sources", value: "24/7", icon: Eye },
+      {
+        label: "Workshops",
+        value: "Instructor-led, outcome-focused labs for secure coding and defensive tooling.",
+        icon: Activity,
+      },
+      {
+        label: "CTFs",
+        value: "Monthly challenge streams across web, binary, crypto, and forensics domains.",
+        icon: Zap,
+      },
+      {
+        label: "Simulations",
+        value: "Multi-team exercises mirroring national-scale incident response and coordination.",
+        icon: AlertTriangle,
+      },
+      {
+        label: "College Collaborations",
+        value: "Embedded curriculum, mentorship, and faculty co-design to scale practical outcomes.",
+        icon: Handshake,
+      },
     ],
     gradient: "from-fuchsia-500/20 via-purple-500/10 to-fuchsia-900/20",
-    ringColor: "rgba(244, 114, 182, 0.3)",
-    glowColor: "rgba(244, 114, 182, 0.4)",
-    imageUrl: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&q=80",
+    ringColor: "rgba(244, 114, 182, 0.18)",
+    glowColor: "rgba(244, 114, 182, 0.28)",
+    imageUrl: "https://images.unsplash.com/photo-1526378721976-267f13b0b7f7?w=800&q=80",
   },
 };
 
@@ -204,7 +237,10 @@ const ProductDetails: React.FC<{ product: ProductData; isActive: boolean }> = ({
                     initial: { opacity: 0, x: -20 },
                     animate: { opacity: 1, x: 0 },
                     transition: { delay: index * 0.1 },
-                    className: "flex items-center gap-3 p-4 rounded-lg bg-white/5 border border-white/10",
+                    whileHover: { scale: 1.03, y: -4, boxShadow: `0 12px 40px ${product.glowColor}` },
+                    whileTap: { scale: 0.995 },
+                    className:
+                      "flex items-center gap-3 p-4 rounded-lg bg-white/5 border border-white/10 transition-transform duration-200",
                   } as any)}
                 >
                   <div
@@ -284,10 +320,10 @@ const SpatialProductShowcase: React.FC = () => {
           {/* Header */}
           <div className="mb-8">
             <p className="font-orbitron text-xs uppercase tracking-[0.4em] text-cyan-300/80 mb-2">
-              Spatial Intelligence
+              Learning Surface
             </p>
             <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-              Intelligence Surface
+              What We Teach
             </h2>
           </div>
 
