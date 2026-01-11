@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import AchievementsGrid from "../components/sections/AchievementsGrid";
+import CountUpMetrics from "../components/ui/CountUp";
 import SpatialProductShowcase from "../components/ui/spatial-product-showcase";
 import CommandCenter from "../components/sections/CommandCenter";
 import {
@@ -48,6 +49,18 @@ const achievements: Achievement[] = [
     description: 'Featured in leading cybersecurity publications and recognized for innovative research contributions.',
     year: '2024',
   },
+  {
+    category: 'Training',
+    title: 'Workshops & Labs Delivered',
+    description: 'Delivered hands-on workshops and lab modules across multiple universities, focusing on applied defensive techniques and incident response.',
+    year: '2023-2024',
+  },
+  {
+    category: 'Platform',
+    title: 'Labs & Learning Modules Launched',
+    description: 'Launched a modular lab platform with curated exercises, guided walkthroughs, and automated assessment for real-world skills.',
+    year: '2024',
+  },
 ];
 
 const Achievements = () => {
@@ -79,9 +92,12 @@ const Achievements = () => {
 
   return (
     <section className="relative min-h-screen bg-[#050505] pt-32 pb-24">
+      {/* OUTER WRAPPER */}
       <div className="container mx-auto px-6">
+
+        {/* NARROW CONTENT */}
         <div className="mx-auto max-w-4xl">
-          {/* Existing Achievements Hero - UNCHANGED */}
+          {/* Hero */}
           <div className="grid gap-8 md:grid-cols-2 md:gap-12 mb-16">
             <motion.div
               variants={leftVariant}
@@ -90,15 +106,16 @@ const Achievements = () => {
               viewport={{ once: true, margin: "-100px" }}
             >
               <p className="mb-4 font-orbitron text-xs uppercase tracking-[0.4em] text-cyan-400">
-                Our Milestones
+                Our Impact
               </p>
               <h1 className="text-4xl font-light text-white sm:text-5xl md:text-6xl">
-                Achievements &{' '}
+                Our Impact &{" "}
                 <span className="bg-gradient-to-r from-cyan-400 to-fuchsia-500 bg-clip-text text-transparent">
-                  Recognitions
+                  Achievements
                 </span>
               </h1>
             </motion.div>
+
             <motion.div
               variants={rightVariant}
               initial="hidden"
@@ -111,45 +128,25 @@ const Achievements = () => {
             </motion.div>
           </div>
 
-          {/* Spatial Intelligence Showcase - CENTERPIECE */}
+          {/* Showcase */}
           <SpatialProductShowcase />
+        </div>
 
-          {/* Glowing Achievements Grid */}
-          <AchievementsGrid />
+        {/* FULL WIDTH — THIS WAS THE GOAL */}
+        <AchievementsGrid />
 
-          {/* Command Center Section */}
+        {/* BACK TO NARROW */}
+        <div className="mx-auto max-w-4xl">
+          <CountUpMetrics />
           <CommandCenter />
 
-          {/* Existing Timeline - UNCHANGED */}
-          <motion.div variants={container} initial="hidden" animate="visible" className="space-y-8 mt-16">
-            {achievements.map((achievement) => (
-              <motion.div
-                key={achievement.title}
-                variants={card}
-                className="relative pl-8 border-l border-white/10"
-              >
-                <div className="absolute -left-2 top-0 h-4 w-4 rounded-full border-2 border-cyan-400 bg-[#050505]" />
-                
-                <div className="pb-8">
-                  <div className="mb-2 flex items-center gap-3">
-                    <span className="rounded-full bg-cyan-400/20 px-3 py-1 text-xs font-medium uppercase tracking-wider text-cyan-300">
-                      {achievement.category}
-                    </span>
-                    <span className="text-xs text-white/50">{achievement.year}</span>
-                  </div>
-                  <h3 className="mb-2 text-xl font-semibold text-white">
-                    {achievement.title}
-                  </h3>
-                  <p className="text-sm leading-relaxed text-white/70">
-                    {achievement.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Existing CTA - UNCHANGED */}
-          <motion.div variants={button} initial="hidden" animate="visible" className="mt-16 text-center">
+          {/* CTA */}
+          <motion.div
+            variants={button}
+            initial="hidden"
+            animate="visible"
+            className="mt-16 text-center"
+          >
             <motion.p variants={paragraph} className="mb-6 text-white/70">
               Learn more about our research and initiatives
             </motion.p>

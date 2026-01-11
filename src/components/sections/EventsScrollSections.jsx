@@ -74,9 +74,17 @@ const EventsScrollSections = () => {
               <div className="relative h-full w-full overflow-hidden rounded-2xl">
                 <div className={`absolute inset-0 ${event.mediaClass}`} />
                 <div className="relative z-10 flex h-full items-center justify-center p-8">
-                  <p className="text-center text-white/80 text-sm md:text-base">
-                    Media placeholder — replace with event visuals or clips
-                  </p>
+                  <div className="max-w-xl text-white/80">
+                    <p className="mb-3 text-sm md:text-base">
+                      Key features:
+                    </p>
+                    <ul className="list-inside list-disc space-y-2 text-sm text-white/70">
+                      <li>Scenario-driven exercises with guided debriefs focused on learning outcomes.</li>
+                      <li>Hands-on labs and measurable skill checkpoints to track learner progress.</li>
+                      <li>Multi-team coordination in simulations to mirror enterprise response workflows.</li>
+                      <li>Accessible materials and challenge write-ups to support post-event learning.</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </ContainerScroll>

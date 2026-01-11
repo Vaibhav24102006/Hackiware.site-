@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import EventsScrollSections from "../components/sections/EventsScrollSections";
+import EventsGrid from "../components/sections/EventsGrid";
 import ImpactMetrics from "../components/sections/ImpactMetrics";
 import FeaturedEventCard from "../components/sections/FeaturedEventCard";
 import EventCTA from "../components/sections/EventCTA";
@@ -66,9 +67,9 @@ const Events = () => {
                 animate="visible"
                 className="text-5xl font-light leading-tight text-white sm:text-6xl md:text-7xl lg:text-8xl"
               >
-                Precision-led{' '}
+                Cybersecurity Events &{' '}
                 <span className="block bg-gradient-to-r from-cyan-400 via-sky-400 to-fuchsia-500 bg-clip-text text-transparent">
-                  Cybersecurity Experiences
+                  Simulations
                 </span>
               </motion.h1>
               
@@ -109,6 +110,7 @@ const Events = () => {
       {/* Event Timeline - Scroll Showcase */}
       <div id="events">
         <EventsScrollSections />
+        <EventsGrid />
       </div>
 
       {/* Impact Metrics Strip */}

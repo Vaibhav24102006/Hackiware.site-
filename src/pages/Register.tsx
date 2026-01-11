@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
@@ -10,7 +10,7 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { register, loginWithGoogle, loginWithGithub } = useAuth();
+  const { user, loading: authLoading, register, loginWithGoogle, loginWithGithub } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent) => {
@@ -37,6 +37,8 @@ const Register = () => {
 
     try {
       await register(email, password, name.trim());
+      // Ensure the local loading indicator is reset promptly after a successful registration
+      setLoading(false);
       navigate("/");
     } catch (err: any) {
       // Human-readable error messages
@@ -58,11 +60,26 @@ const Register = () => {
     }
   };
 
+  // Redirect away from register page when user is authenticated
+  useEffect(() => {
+    // Wait until auth state has resolved
+    if (authLoading) return;
+
+    if (user) {
+      // Clear any local UI state that might remain set during navigation
+      setError("");
+      setLoading(false);
+      navigate("/", { replace: true });
+    }
+  }, [user, authLoading, navigate]);
+
   const handleGoogleLogin = async () => {
     setError("");
     setLoading(true);
     try {
       await loginWithGoogle();
+      // Reset local loading indicator and navigate
+      setLoading(false);
       navigate("/");
     } catch (err: any) {
       // Log complete error details
@@ -103,6 +120,8 @@ const Register = () => {
     setLoading(true);
     try {
       await loginWithGithub();
+      // Reset local loading indicator and navigate
+      setLoading(false);
       navigate("/");
     } catch (err: any) {
       // Log complete error details
@@ -137,6 +156,10 @@ const Register = () => {
       setLoading(false);
     }
   };
+
+  // Don't render the registration form if the auth state is still resolving or the user is already signed in
+  if (authLoading) return null;
+  if (user) return null;
 
   return (
     <section className="mx-auto max-w-md px-4 py-24 text-white">

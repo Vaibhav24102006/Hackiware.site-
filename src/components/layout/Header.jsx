@@ -11,7 +11,9 @@ const navLinks = [
     { label: 'ABOUT', path: '/about' },
     { label: 'ACHIEVEMENTS', path: '/achievements' },
     { label: 'EVENTS', path: '/events' },
-    { label: 'BLOG', path: '/blog' },
+    // Keep /blog in the codebase, but show 'CONTACT' in the nav and
+    // treat both /contact and /blog as the Contact active state.
+    { label: 'CONTACT', path: '/contact' },
 ];
 
 const Header = () => {
@@ -79,8 +81,12 @@ const Header = () => {
                     {/* Desktop Nav */}
                     <nav className="hidden md:flex items-center gap-10 text-[11px] font-medium tracking-[0.28em] uppercase">
                         {navLinks.map((link) => {
-                            const isActive = location.pathname === link.path;
-                            const displayLabel = link.path === '/blog' && location.pathname === '/blog' ? 'CONTACT' : link.label;
+                            // Treat /contact link as active when user is on either /contact or /blog
+                            const isContactLink = link.path === '/contact';
+                            const isActive = isContactLink
+                                ? location.pathname === '/contact' || location.pathname === '/blog'
+                                : location.pathname === link.path;
+
                             return (
                                 <Link
                                     key={link.path}
@@ -93,7 +99,7 @@ const Header = () => {
                                             isActive ? 'text-cyan-300' : 'text-slate-300/70 group-hover:text-cyan-200'
                                         )}
                                     >
-                                        {displayLabel}
+                                        {link.label}
                                     </span>
                                     <span
                                         className={cn(
@@ -188,15 +194,22 @@ const Header = () => {
 
                             <nav className="flex flex-col gap-6">
                                 {navLinks.map((link) => {
-                                    const displayLabel = link.path === '/blog' && location.pathname === '/blog' ? 'CONTACT' : link.label;
+                                    const isContactLink = link.path === '/contact';
+                                    const isActive = isContactLink
+                                        ? location.pathname === '/contact' || location.pathname === '/blog'
+                                        : location.pathname === link.path;
+
                                     return (
                                         <Link
                                             key={link.path}
                                             to={link.path}
                                             onClick={() => setIsMobileMenuOpen(false)}
-                                            className="text-sm font-medium uppercase tracking-[0.24em] text-gray-300 hover:text-cyan-300"
+                                            className={cn(
+                                                'text-sm font-medium uppercase tracking-[0.24em]',
+                                                isActive ? 'text-cyan-300' : 'text-gray-300 hover:text-cyan-300'
+                                            )}
                                         >
-                                            {displayLabel}
+                                            {link.label}
                                         </Link>
                                     );
                                 })}

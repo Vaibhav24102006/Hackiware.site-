@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 import { db } from "../firebase";
-import Contact from "./Contact";
+import Contact from "./ContactPage";
 import { containerVariants, headingVariants, cardVariants } from "../lib/routeAnimations";
 
 interface BlogPost {

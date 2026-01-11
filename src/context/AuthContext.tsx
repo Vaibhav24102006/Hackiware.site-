@@ -53,6 +53,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const register = async (email: string, password: string, name: string): Promise<void> => {
     try {
+      // Diagnostic logging: show current Firebase project and authDomain
+      const regProjectId = (auth as any)?.app?.options?.projectId;
+      const regAuthDomain = (auth as any)?.app?.options?.authDomain;
+      console.debug("[AUTH DEBUG] register() - Firebase config:", { projectId: regProjectId, authDomain: regAuthDomain });
       // Create Firebase Auth user
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const firebaseUser = userCredential.user;
@@ -81,7 +85,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const loginWithGoogle = async (): Promise<void> => {
     try {
+      // Diagnostic logging: expose the Firebase project + provider metadata before calling the popup
+      const projectId = (auth as any)?.app?.options?.projectId;
+      const authDomain = (auth as any)?.app?.options?.authDomain;
+      console.debug("[AUTH DEBUG] loginWithGoogle() - Firebase config:", { projectId, authDomain });
+
       const provider = new GoogleAuthProvider();
+      console.debug("[AUTH DEBUG] loginWithGoogle() - provider:", { providerId: (GoogleAuthProvider as any).PROVIDER_ID, provider });
+      console.debug("[AUTH DEBUG] Calling signInWithPopup (Google)");
+
       const result = await signInWithPopup(auth, provider);
       const firebaseUser = result.user;
 
@@ -123,7 +135,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const loginWithGithub = async (): Promise<void> => {
     try {
+      // Diagnostic logging: expose the Firebase project + provider metadata before calling the popup
+      const projectId = (auth as any)?.app?.options?.projectId;
+      const authDomain = (auth as any)?.app?.options?.authDomain;
+      console.debug("[AUTH DEBUG] loginWithGithub() - Firebase config:", { projectId, authDomain });
+
       const provider = new GithubAuthProvider();
+      console.debug("[AUTH DEBUG] loginWithGithub() - provider:", { providerId: (GithubAuthProvider as any).PROVIDER_ID, provider });
+      console.debug("[AUTH DEBUG] Calling signInWithPopup (GitHub)");
+
       const result = await signInWithPopup(auth, provider);
       const firebaseUser = result.user;
 
