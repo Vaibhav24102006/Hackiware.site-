@@ -129,7 +129,9 @@ const Achievements = () => {
           </div>
 
           {/* Showcase */}
-          <SpatialProductShowcase />
+          <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen px-6">
+  <SpatialProductShowcase />
+</div>
         </div>
 
         {/* FULL WIDTH — THIS WAS THE GOAL */}

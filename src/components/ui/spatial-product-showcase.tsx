@@ -37,28 +37,28 @@ interface ProductData {
 const PRODUCT_DATA: Record<ProductId, ProductData> = {
   left: {
     id: "left",
-    title: "Learning Domains",
+    title: "Core Cybersecurity Domains",
     description:
-      "Core, hands-on domains Hackiware teaches — practical skills that map directly to real-world roles.",
+      "Foundational and advanced domains we actively teach through labs, workshops, and national-level programs.",
     features: [
       {
         label: "Offensive Security",
-        value: "Guided exploit development, web/binary CTFs, and red-team tactics focused on learning by doing.",
+        value: "ACTIVE — Guided exploit development labs covering web exploitation, binary reversing, and real-world red-team tradecraft — designed to mirror live adversary behavior.",
         icon: Zap,
       },
       {
         label: "Defensive Security",
-        value: "Incident response, detection engineering, and hands-on blue-team playbooks.",
+        value: "ACTIVE — Incident response simulations, detection engineering workshops, and hands-on blue-team playbooks with measurable skill checkpoints.",
         icon: ShieldCheck,
       },
       {
         label: "Threat Intelligence",
-        value: "Evidence-driven hunting, feed analysis, and translating signals into teachable exercises.",
+        value: "ACTIVE — Evidence-driven threat hunting exercises, IOC correlation labs, and feed analysis training that translate signals into actionable intelligence.",
         icon: Radar,
       },
       {
         label: "Cybersecurity Education",
-        value: "Curriculum design, instructor training, and lab-based assessments that scale learning.",
+        value: "PAST → PRESENT — Curriculum design, instructor training programs, and lab-based assessments delivered across universities to scale practical learning outcomes.",
         icon: GraduationCap,
       },
     ],
@@ -69,28 +69,29 @@ const PRODUCT_DATA: Record<ProductId, ProductData> = {
   },
   right: {
     id: "right",
-    title: "Applied Programs",
+    title: "Applied & National Programs",
     description:
-      "Hands-on programs and initiatives where learners apply domain skills: workshops, CTFs, simulations, and partnerships.",
+      "Where Hackiware executes — live programs, simulations, and collaborations that translate skills into real-world readiness.",
     features: [
       {
         label: "Workshops",
-        value: "Instructor-led, outcome-focused labs for secure coding and defensive tooling.",
+        value:
+          "PAST & ACTIVE — Instructor-led labs delivered across colleges, focused on secure coding, exploitation basics, and defensive tooling.",
         icon: Activity,
       },
       {
         label: "CTFs",
-        value: "Monthly challenge streams across web, binary, crypto, and forensics domains.",
+        value: "ACTIVE — Recurring CTF-style challenges covering web, binary, crypto, and forensics with increasing difficulty tiers and guided walkthroughs.",
         icon: Zap,
       },
       {
         label: "Simulations",
-        value: "Multi-team exercises mirroring national-scale incident response and coordination.",
+        value: "FLAGSHIP — Multi-team incident response simulations mirroring national-scale coordination, escalation, and decision-making with real-world threat scenarios.",
         icon: AlertTriangle,
       },
       {
         label: "College Collaborations",
-        value: "Embedded curriculum, mentorship, and faculty co-design to scale practical outcomes.",
+        value: "PAST → PRESENT — Long-term partnerships enabling curriculum alignment, faculty co-design, and mentorship pipelines across technical institutions.",
         icon: Handshake,
       },
     ],
@@ -230,6 +231,7 @@ const ProductDetails: React.FC<{ product: ProductData; isActive: boolean }> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
             {product.features.map((feature, index) => {
               const Icon = feature.icon;
+              const isDominant = feature.value.includes("FLAGSHIP");
               return (
                 <motion.div
                   key={feature.label}
@@ -239,8 +241,9 @@ const ProductDetails: React.FC<{ product: ProductData; isActive: boolean }> = ({
                     transition: { delay: index * 0.1 },
                     whileHover: { scale: 1.03, y: -4, boxShadow: `0 12px 40px ${product.glowColor}` },
                     whileTap: { scale: 0.995 },
-                    className:
-                      "flex items-start gap-4 p-6 rounded-lg bg-white/5 border border-white/10 transition-transform duration-200",
+                    className: isDominant
+                      ? "flex items-start gap-4 p-8 rounded-xl bg-white/10 border border-cyan-400/30 transition-transform duration-200"
+                      : "flex items-start gap-4 p-6 rounded-lg bg-white/5 border border-white/10 transition-transform duration-200",
                   } as any)}
                 >
                   <div
