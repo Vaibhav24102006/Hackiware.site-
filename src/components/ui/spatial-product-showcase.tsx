@@ -227,7 +227,7 @@ const ProductDetails: React.FC<{ product: ProductData; isActive: boolean }> = ({
             <p className="text-white/70 text-lg">{product.description}</p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
             {product.features.map((feature, index) => {
               const Icon = feature.icon;
               return (
@@ -240,7 +240,7 @@ const ProductDetails: React.FC<{ product: ProductData; isActive: boolean }> = ({
                     whileHover: { scale: 1.03, y: -4, boxShadow: `0 12px 40px ${product.glowColor}` },
                     whileTap: { scale: 0.995 },
                     className:
-                      "flex items-center gap-3 p-4 rounded-lg bg-white/5 border border-white/10 transition-transform duration-200",
+                      "flex items-start gap-4 p-6 rounded-lg bg-white/5 border border-white/10 transition-transform duration-200",
                   } as any)}
                 >
                   <div
@@ -328,9 +328,9 @@ const SpatialProductShowcase: React.FC = () => {
           </div>
 
           {/* Main content area */}
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-start mb-8">
             {/* Left: Visual */}
-            <div className="order-2 lg:order-1">
+            <div className="order-2 lg:order-1 lg:max-w-[520px] mx-auto">
               <ProductVisual product={currentProduct} isActive={true} />
             </div>
 
